@@ -3,6 +3,8 @@ package com.example.workout_tracker_2;
 import jakarta.persistence.*;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 public class Types {
 
@@ -15,6 +17,7 @@ public class Types {
     private String name;
 
     @OneToMany(mappedBy = "type", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Sessions> sessions;
 
     // Getters and Setters

@@ -1,5 +1,7 @@
 package com.example.workout_tracker_2;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -15,6 +17,7 @@ public class Sessions {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "type_id", nullable = false)
+    @JsonBackReference
     private Types type;
 
     @Column(name = "duration")
