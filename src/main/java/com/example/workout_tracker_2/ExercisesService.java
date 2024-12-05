@@ -37,6 +37,8 @@ public class ExercisesService {
             updatedExercise.setExerciseName(exercise.getExerciseName());
             updatedExercise.setSets(exercise.getSets());
             updatedExercise.setReps(exercise.getReps());
+            updatedExercise.setWeight(exercise.getWeight()); // Include the weight update
+
             //updatedExercise.setSessionId(exercise.getSessionId());
             //updatedExercise.setTypeId(exercise.getTypeId());
             return exercisesRepository.save(updatedExercise);

@@ -1,5 +1,6 @@
 package com.example.workout_tracker_2;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -31,6 +32,9 @@ public class Exercises {
     
     @Column(name = "reps")
     private int reps;
+    
+    @Column(name = "weight")
+    private BigDecimal weight;  // Changed to BigDecimal for weight to accommodate decimals
 
     // Getters and Setters
     public Long getId() {
@@ -71,5 +75,13 @@ public class Exercises {
 
     public void setReps(int reps) {
         this.reps = reps;
+    }
+    
+    public BigDecimal getWeight() {
+        return weight;
+    }
+
+    public void setWeight(BigDecimal weight) {
+        this.weight = weight;
     }
 }
