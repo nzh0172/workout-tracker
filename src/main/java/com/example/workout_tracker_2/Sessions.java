@@ -1,6 +1,10 @@
 package com.example.workout_tracker_2;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.*;
 
@@ -17,11 +21,20 @@ public class Sessions {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "type_id", nullable = false)
-    @JsonBackReference
+    @JsonBackReference  // To prevent infinite recursion when serializing
     private Types type;
 
     @Column(name = "duration")
     private Integer duration;
+    
+    @JsonProperty("type_name")  // Custom name for the type property
+    public String getTypeName() {
+        return type.getName();  // Return only the name of the type
+    }
+    
+    @ManyToMany(mappedBy = "sessions")
+    @JsonManagedReference  // To allow serialization of exercises without infinite recursion
+    private List<Exercises> exercises; // One session can have many exercises
 
     // Getters and Setters
     public Long getId() {
@@ -54,5 +67,13 @@ public class Sessions {
 
     public void setDuration(Integer duration) {
         this.duration = duration;
+    }
+
+    public List<Exercises> getExercises() {
+        return exercises;
+    }
+
+    public void setExercises(List<Exercises> exercises) {
+        this.exercises = exercises;
     }
 }
