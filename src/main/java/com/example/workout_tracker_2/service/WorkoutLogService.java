@@ -36,4 +36,6 @@ public class WorkoutLogService {
     public WorkoutLog save(WorkoutLog log) {
         return workoutLogRepository.save(log);
     }
+    
+    
 }

@@ -23,6 +23,17 @@ public class WorkoutLogController {
     public ResponseEntity<List<WorkoutLog>> getAllLogs() {
         return ResponseEntity.ok(workoutLogService.getAllLogs());
     }
+    
+
+    @GetMapping("/{id}")
+    public ResponseEntity<WorkoutLog> getWorkoutLog(@PathVariable Long id) {
+        Optional<WorkoutLog> workoutLog = workoutLogService.findById(id);
+        if (workoutLog.isPresent()) {
+            return ResponseEntity.ok(workoutLog.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     @PostMapping
     public ResponseEntity<WorkoutLog> createLog(@RequestBody WorkoutLog workoutLog) {
@@ -49,3 +60,8 @@ public class WorkoutLogController {
         }
     }
 }
+
+
+
+
+

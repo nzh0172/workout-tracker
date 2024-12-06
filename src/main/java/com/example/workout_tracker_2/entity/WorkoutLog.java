@@ -13,7 +13,7 @@ public class WorkoutLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "workout_id", nullable = false)
     @JsonBackReference
     private Workout workout;
