@@ -2,6 +2,7 @@ package com.example.workout_tracker_2.frontend;
 
 import javafx.fxml.FXML;
 
+//actionlistener
 public class MainController {
 
     @FXML
@@ -30,4 +31,14 @@ public class MainController {
             e.printStackTrace();
         }
     }
+    
+    @FXML
+    public void goToMain() {
+        try {
+            WorkoutApp.showMainFrame(); // Navigate back to the Main Frame
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
+
