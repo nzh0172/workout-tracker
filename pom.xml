@@ -69,7 +69,24 @@
 	    <groupId>com.fasterxml.jackson.core</groupId>
 	    <artifactId>jackson-databind</artifactId>
 		</dependency>
+		    <!-- JavaFX Controls -->
+		<dependency>
+		    <groupId>org.openjfx</groupId>
+		    <artifactId>javafx-controls</artifactId>
+		    <version>23.0.1</version>
+		</dependency>
+		
+		<!-- JavaFX FXML -->
+		<dependency>
+		    <groupId>org.openjfx</groupId>
+		    <artifactId>javafx-fxml</artifactId>
+		    <version>23.0.1</version>
+		</dependency>
+
 	</dependencies>
+	
+
+
 
 	<build>
 		<plugins>
