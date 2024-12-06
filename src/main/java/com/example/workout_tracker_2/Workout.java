@@ -1,24 +1,22 @@
 package com.example.workout_tracker_2;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 @Entity
-public class Types {
+@Table(name = "workout")
+public class Workout {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "type_id")
     private Long id;
 
-    @Column(name = "type_name", nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "type", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<Sessions> sessions;
+    @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Exercise> exercises = new ArrayList<>();
 
     // Getters and Setters
     public Long getId() {
@@ -37,11 +35,11 @@ public class Types {
         this.name = name;
     }
 
-    public List<Sessions> getSessions() {
-        return sessions;
+    public List<Exercise> getExercises() {
+        return exercises;
     }
 
-    public void setSessions(List<Sessions> sessions) {
-        this.sessions = sessions;
+    public void setExercises(List<Exercise> exercises) {
+        this.exercises = exercises;
     }
 }
