@@ -3,7 +3,7 @@ package com.example.workout_tracker_2;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "exercise_sets")
+@Table(name = "exercise_set")
 
 public class ExerciseSet {
 

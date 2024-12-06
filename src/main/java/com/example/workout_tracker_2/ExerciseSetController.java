@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/exercise_sets")
+@RequestMapping("/exercise-sets")
 public class ExerciseSetController {
 
     private final ExerciseSetService exerciseSetService;

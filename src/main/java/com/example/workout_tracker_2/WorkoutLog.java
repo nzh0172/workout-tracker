@@ -1,12 +1,11 @@
 package com.example.workout_tracker_2;
 
 import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
 
 @Entity
-@Table(name = "exercise")
-public class Exercise {
+@Table(name = "workout_log")
+public class WorkoutLog {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,10 +16,10 @@ public class Exercise {
     private Workout workout;
 
     @Column(nullable = false)
-    private String name;
+    private LocalDate date;
 
-    @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ExerciseSet> sets = new ArrayList<>();
+    @Column(nullable = false)
+    private int duration;
 
     // Getters and Setters
     public Long getId() {
@@ -39,19 +38,19 @@ public class Exercise {
         this.workout = workout;
     }
 
-    public String getName() {
-        return name;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
-    public List<ExerciseSet> getSets() {
-        return sets;
+    public int getDuration() {
+        return duration;
     }
 
-    public void setSets(List<ExerciseSet> sets) {
-        this.sets = sets;
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 }
