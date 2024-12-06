@@ -1,7 +1,12 @@
-package com.example.workout_tracker_2;
+package com.example.workout_tracker_2.service;
 
 import org.springframework.stereotype.Service;
+
+import com.example.workout_tracker_2.entity.Workout;
+import com.example.workout_tracker_2.repository.WorkoutRepository;
+
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class WorkoutService {
@@ -22,5 +27,13 @@ public class WorkoutService {
 
     public void deleteWorkout(Long id) {
         workoutRepository.deleteById(id);
+    }
+    
+    public Optional<Workout> findById(Long id) {
+        return workoutRepository.findById(id);
+    }
+
+    public Workout save(Workout workout) {
+        return workoutRepository.save(workout);
     }
 }

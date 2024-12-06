@@ -1,7 +1,9 @@
-package com.example.workout_tracker_2;
+package com.example.workout_tracker_2.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "workout_log")
@@ -13,6 +15,7 @@ public class WorkoutLog {
 
     @ManyToOne
     @JoinColumn(name = "workout_id", nullable = false)
+    @JsonBackReference
     private Workout workout;
 
     @Column(nullable = false)

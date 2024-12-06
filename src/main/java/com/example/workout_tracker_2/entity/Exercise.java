@@ -1,8 +1,11 @@
-package com.example.workout_tracker_2;
+package com.example.workout_tracker_2.entity;
 
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "exercise")
@@ -14,12 +17,14 @@ public class Exercise {
 
     @ManyToOne
     @JoinColumn(name = "workout_id", nullable = false)
+    @JsonBackReference
     private Workout workout;
 
     @Column(nullable = false)
     private String name;
 
     @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<ExerciseSet> sets = new ArrayList<>();
 
     // Getters and Setters
