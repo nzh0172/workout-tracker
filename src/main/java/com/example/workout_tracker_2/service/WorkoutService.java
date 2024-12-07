@@ -1,5 +1,6 @@
 package com.example.workout_tracker_2.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.workout_tracker_2.entity.Workout;
@@ -13,9 +14,11 @@ public class WorkoutService {
 
     private final WorkoutRepository workoutRepository;
 
+    @Autowired
     public WorkoutService(WorkoutRepository workoutRepository) {
         this.workoutRepository = workoutRepository;
     }
+    
 
     public List<Workout> getAllWorkouts() {
         return workoutRepository.findAll();

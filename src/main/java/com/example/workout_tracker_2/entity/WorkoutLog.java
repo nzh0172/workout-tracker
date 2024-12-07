@@ -24,6 +24,18 @@ public class WorkoutLog {
     @Column(nullable = false)
     private int duration;
 
+ // Parameterized Constructor
+    public WorkoutLog(Long id, Workout workout, LocalDate date, int duration) {
+        this.id = id;
+        this.workout = workout;
+        this.date = date;
+        this.duration = duration;
+    }
+
+    // Default Constructor
+    public WorkoutLog() {
+    }
+    
     // Getters and Setters
     public Long getId() {
         return id;

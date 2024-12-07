@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 @Entity
 @Table(name = "exercise")
@@ -21,13 +23,35 @@ public class Exercise {
     private Workout workout;
 
     @Column(nullable = false)
-    private String name;
+    private String nameValue; // Field used by JPA
+
+    @Transient
+    private final StringProperty name = new SimpleStringProperty(); // JavaFX property for binding
 
     @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<ExerciseSet> sets = new ArrayList<>();
+    
+    // Default Constructor
+    public Exercise() {
+    }
 
-    // Getters and Setters
+    // Parameterized Constructor for JPA
+    public Exercise(Long id, String name, List<ExerciseSet> sets) {
+        this.id = id;
+        this.nameValue = name;
+        this.name.set(name); // Sync JavaFX property
+        if (sets != null) {
+            this.sets = sets;
+        }
+    }
+
+    // Parameterized Constructor for UI
+    public Exercise(String name) {
+        this.name.set(name); // Sync JavaFX property
+    }
+
+    // Getters and Setters for JPA
     public Long getId() {
         return id;
     }
@@ -44,12 +68,13 @@ public class Exercise {
         this.workout = workout;
     }
 
-    public String getName() {
-        return name;
+    public String getNameValue() {
+        return nameValue;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNameValue(String nameValue) {
+        this.nameValue = nameValue;
+        this.name.set(nameValue); // Sync JavaFX property
     }
 
     public List<ExerciseSet> getSets() {
@@ -58,5 +83,19 @@ public class Exercise {
 
     public void setSets(List<ExerciseSet> sets) {
         this.sets = sets;
+    }
+
+    // Getters and Setters for JavaFX Properties
+    public StringProperty nameProperty() {
+        return name;
+    }
+
+    public String getName() {
+        return name.get();
+    }
+
+    public void setName(String name) {
+        this.name.set(name);
+        this.nameValue = name; // Sync JPA field
     }
 }

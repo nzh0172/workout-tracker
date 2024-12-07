@@ -20,6 +20,19 @@ public class Workout {
     @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Exercise> exercises = new ArrayList<>();
+    
+    // Parameterized Constructor
+    public Workout(Long id, String name, List<Exercise> exercise) {
+        this.id = id;
+        this.name = name;
+        if (exercise != null) {
+        	exercises = exercise;
+        }
+    }
+
+    // Default Constructor
+    public Workout() {
+    }
 
     // Getters and Setters
     public Long getId() {

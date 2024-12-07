@@ -10,7 +10,7 @@
   <children>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
          <children>
-            <Button layoutX="20.0" layoutY="327.0" mnemonicParsing="false" onAction="#goToMain" prefHeight="43.0" prefWidth="77.0" text="&lt;" textAlignment="CENTER" wrapText="true" />
+            <Button layoutX="20.0" layoutY="327.0" mnemonicParsing="false" onAction="#goToMainUI" prefHeight="43.0" prefWidth="77.0" text="&lt;" textAlignment="CENTER" wrapText="true" />
             <TreeTableView layoutX="27.0" layoutY="14.0" prefHeight="306.0" prefWidth="599.0">
               <columns>
                 <TreeTableColumn prefWidth="75.0" text="C1" />

@@ -1,17 +1,23 @@
 package com.example.workout_tracker_2.frontend;
 
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+@SpringBootApplication
 public class WorkoutApp extends Application {
 
     private static Stage primaryStage;
     
+    
+    
     @Override
     public void start(Stage primaryStage) throws Exception {
+  
     	WorkoutApp.primaryStage = primaryStage;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/frontend/MainView.fxml"));
         Scene scene = new Scene(loader.load());
@@ -42,8 +48,8 @@ public class WorkoutApp extends Application {
         primaryStage.show();
     }
 
-    public static void showExercisesFrame() throws Exception {
-        Parent root = FXMLLoader.load(WorkoutApp.class.getResource("/frontend/ExercisesView.fxml"));
+    public static void showExerciseListFrame() throws Exception {
+        Parent root = FXMLLoader.load(WorkoutApp.class.getResource("/frontend/ViewExerciseList.fxml"));
         primaryStage.setScene(new Scene(root));
         primaryStage.setTitle("Workout Tracker - Exercises");
         primaryStage.show();
