@@ -12,18 +12,19 @@
   <children>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
          <children>
-            <TableView fx:id="exerciseTable" layoutX="242.0" layoutY="26.0" prefHeight="287.0" prefWidth="158.0">
+            <TableView fx:id="exerciseTable" layoutX="34.0" layoutY="19.0" prefHeight="294.0" prefWidth="569.0">
               <columns>
-                <TableColumn fx:id="nameColumn" prefWidth="150" text="Name" />
+                <TableColumn fx:id="nameColumn" prefWidth="568.0" text="Name" />
               </columns>
             </TableView>
             <Button layoutX="31.0" layoutY="337.0" mnemonicParsing="false" onAction="#goToMainUI" prefHeight="43.0" prefWidth="77.0" text="&lt;" textAlignment="CENTER" wrapText="true" />
-            <Button layoutX="528.0" layoutY="337.0" mnemonicParsing="false" onAction="#goToMainUI" prefHeight="43.0" prefWidth="77.0" text="+" textAlignment="CENTER" wrapText="true" />
-            <Label layoutX="279.0" layoutY="345.0" text="Exercises" textAlignment="CENTER">
+            <Button fx:id="addButton" layoutX="528.0" layoutY="337.0" mnemonicParsing="false" onAction="#goToMainUI" prefHeight="43.0" prefWidth="77.0" text="+" textAlignment="CENTER" wrapText="true" />
+            <Label layoutX="236.0" layoutY="345.0" text="Exercises" textAlignment="CENTER">
                <font>
                   <Font size="21.0" />
                </font>
             </Label>
+            <Button fx:id="deleteButton" layoutX="432.0" layoutY="337.0" mnemonicParsing="false" onAction="#goToMainUI" prefHeight="43.0" prefWidth="77.0" text="-" textAlignment="CENTER" wrapText="true" />
          </children>
     </AnchorPane>
   </children>

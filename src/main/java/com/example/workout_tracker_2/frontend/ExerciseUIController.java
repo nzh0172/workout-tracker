@@ -1,5 +1,7 @@
 package com.example.workout_tracker_2.frontend;
 
+import org.springframework.stereotype.Component;
+
 import com.example.workout_tracker_2.entity.Exercise;
 import com.example.workout_tracker_2.entity.ExerciseSet;
 import com.example.workout_tracker_2.service.ExerciseService;
@@ -9,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+@Component
 public class ExerciseUIController {
 
     private final ExerciseService exercisesService;

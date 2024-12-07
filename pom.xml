@@ -69,6 +69,7 @@
 	    <groupId>com.fasterxml.jackson.core</groupId>
 	    <artifactId>jackson-databind</artifactId>
 		</dependency>
+		
 		    <!-- JavaFX Controls -->
 		<dependency>
 		    <groupId>org.openjfx</groupId>
@@ -93,8 +94,21 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+                	<mainClass>com.example.workout_tracker_2.WorkoutTracker2Application</mainClass>
+            	</configuration>
 			</plugin>
 		</plugins>
-	</build>
+		<resources>
+        <resource>
+            <directory>src/main/resources</directory>
+            <includes>
+                <include>**/*.fxml</include>
+                <include>**/*.properties</include>
+            </includes>
+        </resource>
+    </resources>
+    
+</build>
 
 </project>

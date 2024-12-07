@@ -2,8 +2,10 @@ package com.example.workout_tracker_2.frontend;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import org.springframework.web.client.RestTemplate;
 
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
+@Component
 public class WorkoutAppController {
 
     @FXML

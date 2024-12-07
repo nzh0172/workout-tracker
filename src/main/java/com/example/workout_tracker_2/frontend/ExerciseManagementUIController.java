@@ -6,6 +6,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -46,8 +49,12 @@ public class ExerciseManagementUIController {
 
     private void loadExercises() {
         exercises.clear();
-        exercises.addAll(exerciseService.getAllExercises());
+        List<Exercise> exerciseList = exerciseService.getAllExercises();
+        if (exerciseList != null) {
+            exercises.addAll(exerciseList);
+        }
         exerciseTable.setItems(exercises);
+        System.out.println("Fetched exercises: " + exerciseList);
     }
 
     private void addExercise() {

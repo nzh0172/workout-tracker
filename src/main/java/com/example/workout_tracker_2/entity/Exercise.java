@@ -22,7 +22,7 @@ public class Exercise {
     @JsonBackReference
     private Workout workout;
 
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false)
     private String nameValue; // Field used by JPA
 
     @Transient
@@ -31,13 +31,15 @@ public class Exercise {
     @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<ExerciseSet> sets = new ArrayList<>();
-    
+
     // Default Constructor
     public Exercise() {
+        this.name.addListener((obs, oldVal, newVal) -> this.nameValue = newVal); // Sync changes from JavaFX
     }
 
     // Parameterized Constructor for JPA
     public Exercise(Long id, String name, List<ExerciseSet> sets) {
+        this();
         this.id = id;
         this.nameValue = name;
         this.name.set(name); // Sync JavaFX property
@@ -48,6 +50,7 @@ public class Exercise {
 
     // Parameterized Constructor for UI
     public Exercise(String name) {
+        this();
         this.name.set(name); // Sync JavaFX property
     }
 
@@ -97,5 +100,10 @@ public class Exercise {
     public void setName(String name) {
         this.name.set(name);
         this.nameValue = name; // Sync JPA field
+    }
+
+    @Override
+    public String toString() {
+        return "Exercise{id=" + id + ", name='" + nameValue + "'}";
     }
 }

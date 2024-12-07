@@ -10,7 +10,10 @@ import javafx.scene.control.TreeTableView;
 
 import java.math.BigDecimal;
 
-public class WorkoutLogController {
+import org.springframework.stereotype.Component;
+
+@Component
+public class WorkoutLogUIController {
 
     @FXML
     private TreeTableView<WorkoutLogNode> workoutLogTreeTable;
