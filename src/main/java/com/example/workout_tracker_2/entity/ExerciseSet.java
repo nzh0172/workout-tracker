@@ -21,38 +21,48 @@ public class ExerciseSet {
     @JsonBackReference
     private Exercise exercise;
 
-    //Data types for JPA/Spring Boot
-    @Column(nullable = false)
-    private int repsValue; // Used for JPA
+    @Column(name = "reps", nullable = false)
+    private int reps; // Single field for JPA and UI
 
-    @Column(nullable = false)
-    private double weightValue; // Used for JPA
-
-    //Data types for JavaFX
-    @Transient
-    private final IntegerProperty reps = new SimpleIntegerProperty(); // Used for JavaFX binding
+    @Column(name = "weight", nullable = false)
+    private double weight; // Single field for JPA and UI
 
     @Transient
-    private final DoubleProperty weight = new SimpleDoubleProperty(); // Used for JavaFX binding
+    private final IntegerProperty repsProperty = new SimpleIntegerProperty(); // For JavaFX binding
+
+    @Transient
+    private final DoubleProperty weightProperty = new SimpleDoubleProperty(); // For JavaFX binding
 
     // Default Constructor
     public ExerciseSet() {
+        this.repsProperty.addListener((obs, oldVal, newVal) -> this.reps = newVal.intValue()); // Sync JavaFX property
+        this.weightProperty.addListener((obs, oldVal, newVal) -> this.weight = newVal.doubleValue()); // Sync JavaFX property
     }
 
     // Parameterized Constructor for Database
     public ExerciseSet(Long id, int reps, double weight, Exercise exercise) {
+        this();
         this.id = id;
-        this.repsValue = reps;
-        this.weightValue = weight;
+        this.reps = reps;
+        this.weight = weight;
         this.exercise = exercise;
-        this.reps.set(reps); // Sync JavaFX property
-        this.weight.set(weight); // Sync JavaFX property
+        this.repsProperty.set(reps); // Sync JavaFX property
+        this.weightProperty.set(weight); // Sync JavaFX property
     }
 
     // Parameterized Constructor for UI
     public ExerciseSet(int reps, double weight) {
-        this.reps.set(reps); // Sync JavaFX property
-        this.weight.set(weight); // Sync JavaFX property
+        this();
+        this.reps = reps;
+        this.weight = weight;
+        this.repsProperty.set(reps); // Sync JavaFX property
+        this.weightProperty.set(weight); // Sync JavaFX property
+    }
+
+    @PostLoad
+    private void syncAfterLoad() {
+        this.repsProperty.set(this.reps); // Synchronize JavaFX property with JPA field
+        this.weightProperty.set(this.weight); // Synchronize JavaFX property with JPA field
     }
 
     // Getters and Setters for JPA
@@ -72,48 +82,35 @@ public class ExerciseSet {
         this.exercise = exercise;
     }
 
-    public int getRepsValue() {
-        return repsValue;
+    public int getReps() {
+        return reps;
     }
 
-    public void setRepsValue(int reps) {
-        this.repsValue = reps;
-        this.reps.set(reps); // Sync JavaFX property
+    public void setReps(int reps) {
+        this.reps = reps;
+        this.repsProperty.set(reps); // Sync JavaFX property
     }
 
-    public double getWeightValue() {
-        return weightValue;
+    public double getWeight() {
+        return weight;
     }
 
-    public void setWeightValue(double weight) {
-        this.weightValue = weight;
-        this.weight.set(weight); // Sync JavaFX property
+    public void setWeight(double weight) {
+        this.weight = weight;
+        this.weightProperty.set(weight); // Sync JavaFX property
     }
 
     // Getters and Setters for JavaFX properties
     public IntegerProperty repsProperty() {
-        return reps;
-    }
-
-    public int getReps() {
-        return reps.get();
-    }
-
-    public void setReps(int reps) {
-        this.reps.set(reps);
-        this.repsValue = reps; // Sync JPA field
+        return repsProperty;
     }
 
     public DoubleProperty weightProperty() {
-        return weight;
+        return weightProperty;
     }
 
-    public double getWeight() {
-        return weight.get();
-    }
-
-    public void setWeight(double weight) {
-        this.weight.set(weight);
-        this.weightValue = weight; // Sync JPA field
+    @Override
+    public String toString() {
+        return "ExerciseSet{id=" + id + ", reps=" + reps + ", weight=" + weight + "}";
     }
 }

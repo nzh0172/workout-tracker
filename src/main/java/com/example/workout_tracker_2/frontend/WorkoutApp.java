@@ -9,6 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 import com.example.workout_tracker_2.SpringFXMLLoader;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -64,9 +65,14 @@ public class WorkoutApp extends Application {
         primaryStage.show();
     }
 
+    //App can now properly quit without having to force quit
     @Override
-    public void stop() {
-        springContext.close();
+    public void stop() throws Exception {
+        if (springContext != null) {
+            springContext.close();
+        }
+        Platform.exit(); // Properly exit JavaFX
+        System.exit(0); // Terminate the JVM
     }
 
     public static SpringFXMLLoader getSpringFXMLLoader() {

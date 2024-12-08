@@ -1,10 +1,11 @@
 package com.example.workout_tracker_2.entity;
 
 import jakarta.persistence.*;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "workout")
@@ -14,24 +15,30 @@ public class Workout {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
+    @Column(name = "name", nullable = false)
+    private String name; // Single field for JPA and UI
+
+    @Transient
+    private final StringProperty nameProperty = new SimpleStringProperty(); // JavaFX property for binding
 
     @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
     private List<Exercise> exercises = new ArrayList<>();
-    
-    // Parameterized Constructor
-    public Workout(Long id, String name, List<Exercise> exercise) {
-        this.id = id;
-        this.name = name;
-        if (exercise != null) {
-        	exercises = exercise;
-        }
-    }
 
     // Default Constructor
     public Workout() {
+        this.nameProperty.addListener((obs, oldVal, newVal) -> this.name = newVal); // Sync changes
+    }
+
+    // Parameterized Constructor
+    public Workout(String name) {
+        this();
+        this.name = name;
+        this.nameProperty.set(name);
+    }
+
+    @PostLoad
+    private void syncAfterLoad() {
+        this.nameProperty.set(this.name);
     }
 
     // Getters and Setters
@@ -49,6 +56,11 @@ public class Workout {
 
     public void setName(String name) {
         this.name = name;
+        this.nameProperty.set(name);
+    }
+
+    public StringProperty nameProperty() {
+        return nameProperty;
     }
 
     public List<Exercise> getExercises() {
@@ -57,5 +69,10 @@ public class Workout {
 
     public void setExercises(List<Exercise> exercises) {
         this.exercises = exercises;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

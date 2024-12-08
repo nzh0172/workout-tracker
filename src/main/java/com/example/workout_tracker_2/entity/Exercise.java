@@ -18,31 +18,31 @@ public class Exercise {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "workout_id", nullable = false)
+    @JoinColumn(name = "workout_id", nullable = false) // Make nullable if optional
     @JsonBackReference
     private Workout workout;
 
     @Column(name = "name", nullable = false)
-    private String nameValue; // Field used by JPA
-
-    @Transient
-    private final StringProperty name = new SimpleStringProperty(); // JavaFX property for binding
+    private String name; // Single field for JPA and UI
 
     @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<ExerciseSet> sets = new ArrayList<>();
 
+    @Transient
+    private final StringProperty nameProperty = new SimpleStringProperty(); // For JavaFX binding
+
     // Default Constructor
     public Exercise() {
-        this.name.addListener((obs, oldVal, newVal) -> this.nameValue = newVal); // Sync changes from JavaFX
+        this.nameProperty.addListener((obs, oldVal, newVal) -> this.name = newVal); // Sync JavaFX property
     }
 
     // Parameterized Constructor for JPA
     public Exercise(Long id, String name, List<ExerciseSet> sets) {
         this();
         this.id = id;
-        this.nameValue = name;
-        this.name.set(name); // Sync JavaFX property
+        this.name = name;
+        this.nameProperty.set(name); // Sync JavaFX property
         if (sets != null) {
             this.sets = sets;
         }
@@ -51,12 +51,13 @@ public class Exercise {
     // Parameterized Constructor for UI
     public Exercise(String name) {
         this();
-        this.name.set(name); // Sync JavaFX property
+        this.name = name;
+        this.nameProperty.set(name); // Sync JavaFX property
     }
-    
+
     @PostLoad
     private void syncAfterLoad() {
-        this.name.set(this.nameValue); // Synchronize JavaFX property with JPA field
+        this.nameProperty.set(this.name); // Synchronize JavaFX property with JPA field
     }
 
     // Getters and Setters for JPA
@@ -76,13 +77,13 @@ public class Exercise {
         this.workout = workout;
     }
 
-    public String getNameValue() {
-        return nameValue;
+    public String getName() {
+        return name;
     }
 
-    public void setNameValue(String nameValue) {
-        this.nameValue = nameValue;
-        this.name.set(nameValue); // Sync JavaFX property
+    public void setName(String name) {
+        this.name = name;
+        this.nameProperty.set(name); // Sync JavaFX property
     }
 
     public List<ExerciseSet> getSets() {
@@ -95,20 +96,11 @@ public class Exercise {
 
     // Getters and Setters for JavaFX Properties
     public StringProperty nameProperty() {
-        return name;
-    }
-
-    public String getName() {
-        return name.get();
-    }
-
-    public void setName(String name) {
-        this.name.set(name);
-        this.nameValue = name; // Sync JPA field
+        return nameProperty;
     }
 
     @Override
     public String toString() {
-        return "Exercise{id=" + id + ", name='" + nameValue + "'}";
+        return "Exercise{id=" + id + ", name='" + name + "'}";
     }
 }
