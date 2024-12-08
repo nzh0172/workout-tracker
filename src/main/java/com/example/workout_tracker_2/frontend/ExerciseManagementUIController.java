@@ -39,6 +39,8 @@ public class ExerciseManagementUIController {
 
         // Load exercises from the database
         loadExercises();
+        
+        //exercises.forEach(e -> System.out.println("Exercise: " + e.getNameValue()));
 
         // Add button event
         addButton.setOnAction(event -> addExercise());

@@ -58,7 +58,7 @@ public class ExerciseUIController {
 
         // Load exercises
         loadExercises();
-
+        
         // Bind selected exercise to sets table
         exercisesTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {

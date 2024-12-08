@@ -8,6 +8,10 @@
     -fx-padding: 5px 10px;
 }
 
+.table-cell{
+	-fx-text-fill: black;
+}
+
 .label {
     -fx-font-size: 14px;
 }

@@ -53,6 +53,11 @@ public class Exercise {
         this();
         this.name.set(name); // Sync JavaFX property
     }
+    
+    @PostLoad
+    private void syncAfterLoad() {
+        this.name.set(this.nameValue); // Synchronize JavaFX property with JPA field
+    }
 
     // Getters and Setters for JPA
     public Long getId() {
