@@ -81,7 +81,7 @@ public class WorkoutApp extends Application {
         controller.setWorkoutId(workoutId);
         
         // Set the new scene on the primaryStage
-        primaryStage.setScene(new Scene(root));
+        primaryStage.setScene(new Scene(root, 400, 700));
         primaryStage.setTitle("Log Workout - Workout ID: " + workoutId);
         primaryStage.show();
     }
