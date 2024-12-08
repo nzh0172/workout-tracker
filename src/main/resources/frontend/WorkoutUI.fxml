@@ -5,20 +5,25 @@
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.workout_tracker_2.frontend.ExerciseUIController">
+<AnchorPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.workout_tracker_2.frontend.ExerciseUIController">
     <children>
-        <!-- Exercise List -->
-        <VBox spacing="10" layoutX="20" layoutY="20" prefWidth="500" fx:id="exerciseList">
-            <!-- Dynamic Exercise Cards Will Be Added Here -->
+        <!-- Example content -->
+        <VBox fx:id="exerciseList" layoutX="20" layoutY="20" spacing="10">
+            <!-- Dynamic exercise cards will go here -->
         </VBox>
 
-        <!-- Bottom Toolbar -->
-        <HBox spacing="20" alignment="CENTER" layoutY="400" layoutX="20" prefWidth="560" styleClass="toolbar">
- 
+        <HBox layoutY="400" spacing="20" alignment="CENTER">
+            <Button text="+" fx:id="addExerciseButton"/>
+            <Label text="Timer" fx:id="timerLabel"/>
+            <Button text="✔" fx:id="saveButton"/>
+            <Button text="⏸" fx:id="pauseButton"/>
         </HBox>
     </children>
 </AnchorPane>

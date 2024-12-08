@@ -43,4 +43,11 @@ public class ExerciseSetService {
     public ExerciseSet save(ExerciseSet set) {
         return exerciseSetRepository.save(set);
     }
+    
+    public List<ExerciseSet> getSetsByExerciseId(Long exerciseId) {
+        return exerciseSetRepository.findByExerciseId(exerciseId);
+    }
+
 }
+
+

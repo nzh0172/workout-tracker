@@ -22,6 +22,11 @@ public class ExerciseService {
 	public List<Exercise> getAllExercises() {
         return exerciseRepository.findAll();
     }
+	
+    // Method to get exercises by workout ID
+    public List<Exercise> getExercisesByWorkoutId(Long workoutId) {
+        return exerciseRepository.findByWorkoutId(workoutId);
+    }
 
     public Exercise saveExercise(Exercise exercise) {
         return exerciseRepository.save(exercise);
