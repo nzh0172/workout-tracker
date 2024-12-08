@@ -8,6 +8,7 @@ import com.example.workout_tracker_2.service.ExerciseSetService;
 import com.example.workout_tracker_2.service.WorkoutService;
 
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -138,49 +139,86 @@ public class ExerciseUIController {
     }
 
 
- // Add a new row to the GridPane for a set
     private void addSetRow(GridPane setGrid, int row, Double weight, Integer reps, List<ExerciseSet> sets) {
-        TextField kgField = new TextField(weight != null ? weight.toString() : "");
+        ExerciseSet currentSet = (row < sets.size()) ? sets.get(row) : new ExerciseSet();
+        if (row >= sets.size()) {
+            sets.add(currentSet); // Add the set to the list if it's new
+        }
+
+        // Weight Field
+        String weightText = (weight == null) ? "" : (weight % 1 == 0 ? String.valueOf(weight.intValue()) : weight.toString());
+        TextField kgField = new TextField(weightText);
         kgField.setPromptText("kg");
         kgField.setPrefWidth(50);
+        kgField.textProperty().addListener((obs, oldVal, newVal) -> {
+            currentSet.setWeight(newVal.isEmpty() ? null : Double.valueOf(newVal));
+        });
         setGrid.add(kgField, 0, row);
 
-        TextField repsField = new TextField(reps != null ? reps.toString() : "");
+        // Reps Field
+        String repsText = (reps == null) ? "" : String.valueOf(reps);
+        TextField repsField = new TextField(repsText);
         repsField.setPromptText("reps");
         repsField.setPrefWidth(50);
+        repsField.textProperty().addListener((obs, oldVal, newVal) -> {
+            currentSet.setReps(newVal.isEmpty() ? null : Integer.valueOf(newVal));
+        });
         setGrid.add(repsField, 1, row);
 
+        // Delete Button
         Button deleteButton = new Button("✖");
         deleteButton.getStyleClass().add("delete-set-button");
         setGrid.add(deleteButton, 2, row);
 
-        deleteButton.setOnAction(event -> {
-            // Remove the children in the specified row
-            setGrid.getChildren().removeIf(node -> GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) == row);
-
-            // Remove the ExerciseSet from the list if it exists
-            if (row < sets.size()) {
-                sets.remove(row);
-            }
-
-            // Reassign row indices for remaining children
-            for (int i = 0; i < setGrid.getChildren().size(); i++) {
-                int currentRow = GridPane.getRowIndex(setGrid.getChildren().get(i));
-                if (currentRow > row) {
-                    GridPane.setRowIndex(setGrid.getChildren().get(i), currentRow - 1);
-                }
-            }
-        });
+        deleteButton.setOnAction(event -> deleteSet(setGrid, currentSet, sets));
     }
     
- // Reindex the rows in the GridPane after a deletion
-    private void reindexRows(GridPane setGrid) {
-        int rowCount = 0;
-        for (var child : setGrid.getChildren()) {
-            Integer currentRowIndex = GridPane.getRowIndex(child);
-            if (currentRowIndex != null) {
-                GridPane.setRowIndex(child, rowCount / 3); // 3 columns (kgField, repsField, deleteButton)
+
+    
+    private void deleteSet(GridPane setGrid, ExerciseSet setToDelete, List<ExerciseSet> sets) {
+        // Prevent deleting the last remaining set
+        if (sets.size() <= 1) {
+            System.out.println("Cannot delete the last set.");
+            return;
+        }
+
+        // Remove the set from the list
+        int indexToRemove = sets.indexOf(setToDelete);
+        if (indexToRemove != -1) {
+            sets.remove(indexToRemove);
+        }
+
+        // Rebuild the GridPane
+        rebuildSetGrid(setGrid, sets);
+    }
+    
+    private void updateSetsFromGrid(GridPane setGrid, List<ExerciseSet> sets) {
+        for (Node node : setGrid.getChildren()) {
+            Integer row = GridPane.getRowIndex(node);
+            if (row == null || row >= sets.size()) continue;
+
+            ExerciseSet set = sets.get(row);
+
+            if (GridPane.getColumnIndex(node) == 0 && node instanceof TextField kgField) {
+                // Preserve weight as null or parse it as an Integer or Double
+                String weightText = kgField.getText().trim();
+                set.setWeight(weightText.isEmpty() ? null : Double.valueOf(weightText));
             }
+
+            if (GridPane.getColumnIndex(node) == 1 && node instanceof TextField repsField) {
+                // Preserve reps as null or parse it as an Integer
+                String repsText = repsField.getText().trim();
+                set.setReps(repsText.isEmpty() ? null : Integer.valueOf(repsText));
+            }
+        }
+    }
+    
+    private void rebuildSetGrid(GridPane setGrid, List<ExerciseSet> sets) {
+        setGrid.getChildren().clear(); // Clear all rows
+
+        for (int i = 0; i < sets.size(); i++) {
+            ExerciseSet set = sets.get(i);
+            addSetRow(setGrid, i, set.getWeight(), set.getReps(), sets); // Rebuild each row
         }
     }
 

@@ -21,8 +21,8 @@ public class MainUIController {
     @FXML
     public void initialize() {
         // Pass workout IDs to the handler
-        pushButton.setOnAction(event -> goToWorkoutUI(3L)); // Pass ID for "Push"
-        pullButton.setOnAction(event -> goToWorkoutUI(2L)); // Pass ID for "Pull"
+        pushButton.setOnAction(event -> goToWorkoutUI(2L)); // Pass ID for "Push"
+        pullButton.setOnAction(event -> goToWorkoutUI(3L)); // Pass ID for "Pull"
         legsButton.setOnAction(event -> goToWorkoutUI(1L)); // Pass ID for "Legs"
     }
 
