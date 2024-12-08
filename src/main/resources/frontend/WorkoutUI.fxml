@@ -25,7 +25,7 @@
                 <!-- Dynamic exercise cards will be added here -->
             </VBox>
         </ScrollPane>
-    </center>
+    </center>	
 
     <!-- Buttons at the bottom -->
     <bottom>

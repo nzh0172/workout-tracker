@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -79,7 +80,7 @@ public class ExerciseUIController {
         }
     }
 
-    // Add an exercise card for an existing exercise from the database
+ // Add an exercise card for an existing exercise from the database
     private void addExerciseCard(Exercise exercise) {
         VBox exerciseCard = new VBox(5);
         exerciseCard.getStyleClass().add("exercise-card");
@@ -93,16 +94,17 @@ public class ExerciseUIController {
         GridPane setGrid = new GridPane();
         setGrid.setHgap(10);
         setGrid.setVgap(5);
+        List<ExerciseSet> sets = exerciseSetService.getSetsByExerciseId(exercise.getId());
         int row = 0;
-        for (ExerciseSet set : exerciseSetService.getSetsByExerciseId(exercise.getId())) {
-            addSetRow(setGrid, row++, set.getWeight(), set.getReps());
+        for (ExerciseSet set : sets) {
+            addSetRow(setGrid, row++, set.getWeight(), set.getReps(), sets);
         }
         exerciseCard.getChildren().add(setGrid);
 
         // Add "+ REPS" button
         Button addRepsButton = new Button("+ REPS");
         addRepsButton.getStyleClass().add("add-reps-button");
-        addRepsButton.setOnAction(event -> addSetRow(setGrid, setGrid.getRowCount(), null, null));
+        addRepsButton.setOnAction(event -> addSetRow(setGrid, setGrid.getRowCount(), null, null, sets));
         exerciseCard.getChildren().add(addRepsButton);
 
         exerciseList.getChildren().add(exerciseCard);
@@ -122,20 +124,22 @@ public class ExerciseUIController {
         GridPane setGrid = new GridPane();
         setGrid.setHgap(10);
         setGrid.setVgap(5);
-        addSetRow(setGrid, 0, null, null);
+        List<ExerciseSet> sets = new ArrayList<>();
+        addSetRow(setGrid, 0, null, null, sets);
         exerciseCard.getChildren().add(setGrid);
 
         // Add "+ REPS" button
         Button addRepsButton = new Button("+ REPS");
         addRepsButton.getStyleClass().add("add-reps-button");
-        addRepsButton.setOnAction(event -> addSetRow(setGrid, setGrid.getRowCount(), null, null));
+        addRepsButton.setOnAction(event -> addSetRow(setGrid, setGrid.getRowCount(), null, null, sets));
         exerciseCard.getChildren().add(addRepsButton);
 
         exerciseList.getChildren().add(exerciseCard);
     }
 
-    // Add a new row to the GridPane for a set
-    private void addSetRow(GridPane setGrid, int row, Double weight, Integer reps) {
+
+ // Add a new row to the GridPane for a set
+    private void addSetRow(GridPane setGrid, int row, Double weight, Integer reps, List<ExerciseSet> sets) {
         TextField kgField = new TextField(weight != null ? weight.toString() : "");
         kgField.setPromptText("kg");
         kgField.setPrefWidth(50);
@@ -145,7 +149,41 @@ public class ExerciseUIController {
         repsField.setPromptText("reps");
         repsField.setPrefWidth(50);
         setGrid.add(repsField, 1, row);
+
+        Button deleteButton = new Button("✖");
+        deleteButton.getStyleClass().add("delete-set-button");
+        setGrid.add(deleteButton, 2, row);
+
+        deleteButton.setOnAction(event -> {
+            // Remove the children in the specified row
+            setGrid.getChildren().removeIf(node -> GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) == row);
+
+            // Remove the ExerciseSet from the list if it exists
+            if (row < sets.size()) {
+                sets.remove(row);
+            }
+
+            // Reassign row indices for remaining children
+            for (int i = 0; i < setGrid.getChildren().size(); i++) {
+                int currentRow = GridPane.getRowIndex(setGrid.getChildren().get(i));
+                if (currentRow > row) {
+                    GridPane.setRowIndex(setGrid.getChildren().get(i), currentRow - 1);
+                }
+            }
+        });
     }
+    
+ // Reindex the rows in the GridPane after a deletion
+    private void reindexRows(GridPane setGrid) {
+        int rowCount = 0;
+        for (var child : setGrid.getChildren()) {
+            Integer currentRowIndex = GridPane.getRowIndex(child);
+            if (currentRowIndex != null) {
+                GridPane.setRowIndex(child, rowCount / 3); // 3 columns (kgField, repsField, deleteButton)
+            }
+        }
+    }
+
 
     // Save workout session to the database
     private void saveWorkout() {
