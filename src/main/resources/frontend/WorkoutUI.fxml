@@ -12,6 +12,7 @@
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.workout_tracker_2.frontend.ExerciseUIController">
     <!-- Timer at the top -->
+    <fx:include source="TimerUI.fxml" fx:id="timerController"/>
     <top>
         <HBox alignment="CENTER" spacing="10" style="-fx-background-color: #f5f5f5; -fx-padding: 10; -fx-border-color: #ccc; -fx-border-width: 1;">
             <Label fx:id="timerLabel" text="00:30:34" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>

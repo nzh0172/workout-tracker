@@ -60,7 +60,7 @@ public class WorkoutApp extends Application {
     }
 
     public static void showWorkoutLogFrame() throws Exception {
-        Parent root = springFXMLLoader.load("/frontend/ViewWorkoutLogs.fxml");
+        Parent root = springFXMLLoader.load("/frontend/TimerUI.fxml");
         primaryStage.setScene(new Scene(root));
         primaryStage.setTitle("Workout Tracker - Log");
         primaryStage.show();

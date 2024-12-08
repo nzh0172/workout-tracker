@@ -54,12 +54,18 @@ public class ExerciseUIController {
     private Long workoutId; // The ID of the current workout session
     
     @FXML
+    private TimerUIController timerController;
+    
+    @FXML
     private Label workoutLabel;
 
     public void initialize() {
         // Handle "Add Exercise" button
         addExerciseButton.setOnAction(event -> addExerciseCard("New Exercise"));
 
+        // Timer initialization
+        timerController.initialize();
+        
         // Handle "Save" button
         saveButton.setOnAction(event -> saveWorkout());
     }
