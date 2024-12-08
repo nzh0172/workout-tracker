@@ -15,3 +15,7 @@
 .label {
     -fx-font-size: 14px;
 }
+
+.button-bar {
+    -fx-background-color: lightgray;
+}

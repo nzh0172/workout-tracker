@@ -40,6 +40,12 @@ public class ExerciseUIController {
 
     @FXML
     private TableColumn<ExerciseSet, Double> weightColumn;
+    
+
+    private Long workoutId;
+
+    @FXML
+    private Label workoutLabel;
 
     private ObservableList<Exercise> exercises = FXCollections.observableArrayList();
     private ObservableList<ExerciseSet> exerciseSets = FXCollections.observableArrayList();
@@ -143,6 +149,22 @@ public class ExerciseUIController {
             WorkoutApp.showMainFrame(); // Navigate back to the Main Frame
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+
+
+    public void setWorkoutId(Long workoutId) {
+        this.workoutId = workoutId;
+
+        // Update the UI based on the workout ID
+        loadWorkoutDetails();
+    }
+
+    private void loadWorkoutDetails() {
+        // Example: Update a label with the workout ID
+        if (workoutLabel != null) {
+            workoutLabel.setText("Workout ID: " + workoutId);
         }
     }
 }

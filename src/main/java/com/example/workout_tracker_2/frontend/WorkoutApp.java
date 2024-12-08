@@ -30,11 +30,26 @@ public class WorkoutApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        WorkoutApp.primaryStage = primaryStage;
-        Parent root = springFXMLLoader.load("/frontend/MainView.fxml");
-        primaryStage.setScene(new Scene(root));
-        primaryStage.setTitle("Workout Tracker");
-        primaryStage.show();
+        try {
+            System.out.println("Starting WorkoutApp...");
+            WorkoutApp.primaryStage = primaryStage;
+
+            System.out.println("Loading MainView.fxml...");
+            Parent root = springFXMLLoader.load("/frontend/MainView.fxml");
+            
+            Scene scene = new Scene(root);
+            //Load CSS
+            scene.getStylesheets().add(getClass().getResource("/frontend/styles.css").toExternalForm());
+
+            System.out.println("MainView.fxml loaded successfully.");
+            primaryStage.setScene(scene);
+            primaryStage.setTitle("Workout Tracker");
+            primaryStage.show();
+        } catch (Exception e) {
+            System.err.println("Error loading MainView.fxml:");
+            e.printStackTrace();
+            Platform.exit();
+        }
     }
 
     public static void showMainFrame() throws Exception {
@@ -51,10 +66,23 @@ public class WorkoutApp extends Application {
         primaryStage.show();
     }
 
-    public static void showSessionsFrame() throws Exception {
-        Parent root = springFXMLLoader.load("/frontend/ViewSessions.fxml");
+    public static void showSessionsFrame(Long workoutId) throws Exception {
+        System.out.println("----------->Workout ID: " + workoutId);
+    	// Load the FXML file
+        Parent root = springFXMLLoader.load("/frontend/WorkoutUI.fxml");
+
+        // Get the JavaFX controller and pass the workout ID
+        ExerciseUIController controller = springFXMLLoader.getController(ExerciseUIController.class);
+        if (controller == null) {
+            throw new IllegalStateException("Controller not found for WorkoutUI.fxml");
+        }
+        System.out.println("----------->Controller: " + controller);
+
+        controller.setWorkoutId(workoutId);
+        
+        // Set the new scene on the primaryStage
         primaryStage.setScene(new Scene(root));
-        primaryStage.setTitle("Workout Tracker - Sessions");
+        primaryStage.setTitle("Log Workout - Workout ID: " + workoutId);
         primaryStage.show();
     }
 
