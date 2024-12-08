@@ -9,6 +9,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
 import java.util.List;
@@ -111,7 +113,7 @@ public class ExerciseManagementUIController {
                 Workout selectedWorkout = workoutComboBox.getSelectionModel().getSelectedItem();
 
                 if (name.isEmpty() || selectedWorkout == null) {
-                    showAlert("Invalid Input", "Please enter a valid name and select a workout.");
+                    showAlert(Alert.AlertType.WARNING, "Invalid Input", "Please enter a valid name and select a workout.");
                     return null;
                 }
 
@@ -131,9 +133,9 @@ public class ExerciseManagementUIController {
                 // Save the exercise and reload the table
                 exerciseService.saveExercise(exercise);
                 loadExercises();
-                showAlert("Success", "Exercise added successfully.");
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Exercise added successfully.");
             } catch (Exception e) {
-                showAlert("Error", "Failed to add exercise: " + e.getMessage());
+                showAlert(Alert.AlertType.WARNING, "Error", "Failed to add exercise: " + e.getMessage());
             }
         });
     }
@@ -158,22 +160,42 @@ public class ExerciseManagementUIController {
                         // Reload the table
                         loadExercises();
 
-                        showAlert("Success", "Exercise deleted successfully.");
+                        showAlert(Alert.AlertType.INFORMATION, "Success", "Exercise deleted successfully.");
                     } catch (Exception e) {
-                        showAlert("Error", "Failed to delete exercise: " + e.getMessage());
+                        showAlert(Alert.AlertType.WARNING, "Error", "Failed to delete exercise: " + e.getMessage());
                     }
                 }
             });
         } else {
-            showAlert("No Selection", "No exercise selected to delete.");
+            showAlert(Alert.AlertType.WARNING, "No Selection", "No exercise selected to delete.");
         }
     }
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+    private void showAlert(Alert.AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
+
+        // Set custom icon based on alert type
+        ImageView icon = null;
+        try {
+        	
+            if (type == Alert.AlertType.WARNING) {
+                icon = new ImageView(new Image(getClass().getResourceAsStream("/icons/warning-icon.png")));
+            } else if (type == Alert.AlertType.INFORMATION) {
+                icon = new ImageView(new Image(getClass().getResourceAsStream("/icons/success-icon.png")));
+            }
+
+            if (icon != null) {
+                icon.setFitHeight(48);
+                icon.setFitWidth(48);
+                alert.setGraphic(icon);
+            }
+        } catch (Exception e) {
+            System.err.println("Failed to load icon: " + e.getMessage());
+        }
+
         alert.showAndWait();
     }
     

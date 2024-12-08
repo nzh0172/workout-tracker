@@ -103,8 +103,7 @@
         <resource>
             <directory>src/main/resources</directory>
             <includes>
-                <include>**/*.fxml</include>
-                <include>**/*.properties</include>
+                <include>**/*</include> <!--include all files-->
             </includes>
         </resource>
     </resources>
