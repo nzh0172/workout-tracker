@@ -4,12 +4,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
 
-<HBox xmlns="http://javafx.com/javafx/17"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.example.workout_tracker_2.frontend.TimerUIController">
-    <children>
-        <Label fx:id="timerLabel" text="00:00:00" />
-        <Button fx:id="startPauseButton" text="Start/PauseButton" onAction="#startTimer" />
-        <Button fx:id="resetButton" text="Reset" onAction="#pauseTimer" />
-    </children>
+<HBox fx:id="timerContainer" alignment="CENTER" spacing="10" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.workout_tracker_2.frontend.TimerUIController">
+    <Label fx:id="timerLabel" style="-fx-font-size: 20px;" text="00:00:00" />
+    <Button fx:id="startPauseButton" text="Start" />
+    <Button fx:id="resetButton" text="Reset" />
 </HBox>
