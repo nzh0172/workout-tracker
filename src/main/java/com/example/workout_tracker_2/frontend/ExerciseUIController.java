@@ -14,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -48,13 +49,13 @@ public class ExerciseUIController {
     @FXML
     private Button pauseButton;
 
-    @FXML
-    private Label timerLabel;
-
+    
     private Long workoutId; // The ID of the current workout session
     
-    @FXML
+    
     private TimerUIController timerController;
+    @FXML
+    private HBox timerContainer;
     
     @FXML
     private Label workoutLabel;
@@ -64,7 +65,16 @@ public class ExerciseUIController {
         addExerciseButton.setOnAction(event -> addExerciseCard("New Exercise"));
 
         // Timer initialization
-        timerController.initialize();
+        // Look up the TimerUIController from the included FXML
+        timerController = (TimerUIController) timerContainer.getProperties().get("timerController");
+
+        if (timerController != null) {
+            timerController.startTimer(); // Start the timer immediately for testing
+            System.out.println("timerContainer loaded successfully!");
+
+        } else {
+            System.err.println("TimerUIController is null!");
+        }
         
         // Handle "Save" button
         saveButton.setOnAction(event -> saveWorkout());
@@ -265,5 +275,18 @@ public class ExerciseUIController {
         });
 
         System.out.println("Workout session saved!");
+    }
+    
+    // Optionally expose methods to interact with the timer
+    public void startTimer() {
+        if (timerController != null) {
+            timerController.startTimer();
+        }
+    }
+
+    public void pauseTimer() {
+        if (timerController != null) {
+            timerController.pauseTimer();
+        }
     }
 }

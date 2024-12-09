@@ -6,11 +6,10 @@
 
 <HBox xmlns="http://javafx.com/javafx/17"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.example.workout_tracker_2.frontend.TimerUIController"
-      alignment="CENTER" spacing="10">
-    <Label fx:id="timerLabel" text="00:00:00" style="-fx-font-size: 20px;" />
-    <Button fx:id="startPauseButton" text="Start" />
-    <Button fx:id="resetButton" text="Reset" />
+      fx:controller="com.example.workout_tracker_2.frontend.TimerUIController">
+    <children>
+        <Label fx:id="timerLabel" text="00:00:00" />
+        <Button fx:id="startPauseButton" text="Start/PauseButton" onAction="#startTimer" />
+        <Button fx:id="resetButton" text="Reset" onAction="#pauseTimer" />
+    </children>
 </HBox>
-
-

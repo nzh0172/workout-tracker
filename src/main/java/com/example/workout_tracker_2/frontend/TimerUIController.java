@@ -48,13 +48,13 @@ public class TimerUIController {
         resetButton.setOnAction(event -> resetTimer());
     }
 
-    private void startTimer() {
+    public void startTimer() {
         timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> elapsedTimeProperty.set(elapsedTimeProperty.get() + 1)));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
     }
 
-    private void pauseTimer() {
+    public void pauseTimer() {
         if (timeline != null) {
             timeline.pause();
         }
