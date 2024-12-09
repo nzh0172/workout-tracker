@@ -26,7 +26,6 @@ public class TimerUIController {
 
     private Timeline timeline;
     private IntegerProperty elapsedTimeProperty = new SimpleIntegerProperty(0);
-    private boolean isRunning = false;
 
     public void initialize() {
         timerLabel.textProperty().bind(Bindings.createStringBinding(
@@ -34,28 +33,48 @@ public class TimerUIController {
                 elapsedTimeProperty
         ));
 
-        startPauseButton.setOnAction(event -> {
-            if (isRunning) {
-                pauseTimer();
-                startPauseButton.setText("Start");
-            } else {
-                startTimer();
-                startPauseButton.setText("Pause");
-            }
-            isRunning = !isRunning;
-        });
-
+        // Register this controller in the root node's properties
+        if (timerLabel != null) {
+            timerLabel.getParent().getProperties().put("timerController", this);
+        }
+        
+        //Set button actions
+        startPauseButton.setText("Pause");
+        startPauseButton.setOnAction(event -> handleStartPause());
+        
         resetButton.setOnAction(event -> resetTimer());
+
+        // Initialize the timeline
+        setupTimeline();
+    }
+    
+    private void setupTimeline() {
+        timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            elapsedTimeProperty.set(elapsedTimeProperty.get() + 1);
+        }));
+        timeline.setCycleCount(Animation.INDEFINITE);
+    }
+    
+    private void handleStartPause() {
+        if (timeline.getStatus() == Animation.Status.RUNNING) {
+            // If the timer is running, pause it
+            pauseTimer();
+            startPauseButton.setText("Start");
+        } else {
+            // If the timer is not running, start it
+            startTimer();
+            startPauseButton.setText("Pause");
+        }
     }
 
     public void startTimer() {
-        timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> elapsedTimeProperty.set(elapsedTimeProperty.get() + 1)));
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
+        if (timeline != null && timeline.getStatus() != Animation.Status.RUNNING) {
+            timeline.play();
+        }
     }
 
     public void pauseTimer() {
-        if (timeline != null) {
+        if (timeline != null && timeline.getStatus() == Animation.Status.RUNNING) {
             timeline.pause();
         }
     }
@@ -66,7 +85,6 @@ public class TimerUIController {
         }
         elapsedTimeProperty.set(0);
         startPauseButton.setText("Start");
-        isRunning = false;
     }
 
     private String formatElapsedTime(int seconds) {

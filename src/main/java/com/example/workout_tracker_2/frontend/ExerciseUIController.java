@@ -55,7 +55,7 @@ public class ExerciseUIController {
     
     private TimerUIController timerController;
     @FXML
-    private HBox timerContainer;
+    private HBox timerContainer; // root node of TimerUI.fxml
     
     @FXML
     private Label workoutLabel;
