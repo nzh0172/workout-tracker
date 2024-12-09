@@ -93,7 +93,12 @@ public class TimerUIController {
         elapsedTimeProperty.set(0);
         //startPauseButton.setText("Start");
     }
-
+    
+    // For logging 
+    public int getElapsedTime() {
+        return elapsedTimeProperty.get();
+    }
+    
     private String formatElapsedTime(int seconds) {
         int hours = seconds / 3600;
         int minutes = (seconds % 3600) / 60;
