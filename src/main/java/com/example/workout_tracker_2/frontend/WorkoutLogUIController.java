@@ -55,15 +55,23 @@ public class WorkoutLogUIController {
 
         // Workout name
         Label workoutNameLabel = new Label(workoutLog.getWorkout().getName());
-        workoutNameLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+        workoutNameLabel.setStyle("-fx-font-size: 30px; -fx-font-weight: bold;");
         logCard.getChildren().add(workoutNameLabel);
 
-        // Exercises and sets
+        // Container for exercises
         VBox exerciseContainer = new VBox(5);
         exerciseContainer.setStyle("-fx-padding: 5;");
 
-     // Loop through the exercises for this workout log
+        // Loop through the exercises for this workout log
         for (Exercise exercise : workoutLog.getWorkout().getExercises()) {
+            VBox exerciseVBox = new VBox(5);
+            exerciseVBox.setStyle("-fx-padding: 10; -fx-background-color: #e8f5e9; -fx-border-color: #c8e6c9;");
+
+            // Add the exercise name
+            Label exerciseLabel = new Label(exercise.getName());
+            exerciseLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+            exerciseVBox.getChildren().add(exerciseLabel);
+
             // Filter sets that belong to this specific log
             List<ExerciseSet> filteredSets = exercise.getSets().stream()
                 .filter(set -> set.getWorkoutLog() != null) // Ensure WorkoutLog is not null
@@ -73,12 +81,19 @@ public class WorkoutLogUIController {
             // Display filtered sets in the UI
             for (ExerciseSet set : filteredSets) {
                 Label setLabel = new Label(set.getReps() + " x " + set.getWeight() + "kg");
-                exerciseContainer.getChildren().add(setLabel);
+                setLabel.setStyle("-fx-font-size: 15px");
+
+                exerciseVBox.getChildren().add(setLabel); // Add set details under the exercise
             }
+
+            // Add the exerciseVBox (with its name and sets) to the exerciseContainer
+            exerciseContainer.getChildren().add(exerciseVBox);
         }
 
+        // Add the exerciseContainer to the logCard
         logCard.getChildren().add(exerciseContainer);
 
+        // Add the logCard to the main container
         logContainer.getChildren().add(logCard);
     }
 

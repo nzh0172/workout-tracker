@@ -4,14 +4,18 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox prefHeight="428.0" prefWidth="389.0" spacing="10" style="-fx-padding: 10;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.workout_tracker_2.frontend.WorkoutLogUIController">
+<VBox prefHeight="619.0" prefWidth="511.0" spacing="10" style="-fx-padding: 10;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.workout_tracker_2.frontend.WorkoutLogUIController">
     <children>
         <!-- Title -->
-        <Label style="-fx-font-size: 25px; -fx-font-weight: bold;" text="Workout Logs" />
+        <Label style="-fx-font-size: 40px; -fx-font-weight: bold;" text="Workout Logs">
+         <font>
+            <Font size="24.0" />
+         </font></Label>
         
         <!-- Scrollable area for logs -->
-        <ScrollPane fitToWidth="true" prefHeight="326.0" prefWidth="369.0" style="-fx-background-color: white;">
+        <ScrollPane fitToWidth="true" prefHeight="483.0" prefWidth="491.0" style="-fx-background-color: white;">
             <VBox fx:id="logContainer" spacing="10" style="-fx-padding: 10;">
                 <!-- Logs will be dynamically added here -->
             </VBox>
