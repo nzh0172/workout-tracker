@@ -21,7 +21,7 @@ public class Workout {
     @Transient
     private final StringProperty nameProperty = new SimpleStringProperty(); // JavaFX property for binding
 
-    @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "workout", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Exercise> exercises = new ArrayList<>();
 
     // Default Constructor

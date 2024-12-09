@@ -3,7 +3,9 @@ package com.example.workout_tracker_2.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.workout_tracker_2.entity.Exercise;
 import com.example.workout_tracker_2.entity.ExerciseSet;
+import com.example.workout_tracker_2.entity.WorkoutLog;
 import com.example.workout_tracker_2.repository.ExerciseSetRepository;
 
 import java.util.List;
@@ -46,6 +48,10 @@ public class ExerciseSetService {
     
     public List<ExerciseSet> getSetsByExerciseId(Long exerciseId) {
         return exerciseSetRepository.findByExerciseId(exerciseId);
+    }
+    
+    public List<ExerciseSet> getSetsByExerciseAndWorkoutLog(Exercise exercise, WorkoutLog workoutLog) {
+        return exerciseSetRepository.findByExerciseAndWorkoutLog(exercise, workoutLog);
     }
 
 }

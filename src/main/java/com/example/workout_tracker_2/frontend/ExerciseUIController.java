@@ -24,6 +24,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class ExerciseUIController {
@@ -105,21 +106,43 @@ public class ExerciseUIController {
     public void setWorkoutId(Long workoutId) {
         this.workoutId = workoutId;
         System.out.println("Workout ID set to: " + workoutId);
-        loadExercisesForWorkout(workoutId);
+        
+        //Load today's session or fallback to loading all exercise (for other days)
+        loadWorkoutSession();
     }
     
+ // Load the workout session for today
+    public void loadWorkoutSession() {
+        // Fetch the latest workout log for today
+        Optional<WorkoutLog> latestWorkoutLog = workoutLogService.findLatestByWorkoutAndDate(workoutId, LocalDate.now());
 
-    // Load exercises and their sets for the given workout ID
+        // Clear the current UI
+        exerciseList.getChildren().clear();
+
+        if (latestWorkoutLog.isPresent()) {
+            System.out.println("Loading the latest workout log for today.");
+            WorkoutLog workoutLog = latestWorkoutLog.get();
+
+            // Loop through exercises in the workout log and update UI
+            for (Exercise exercise : workoutLog.getWorkout().getExercises()) {
+                addExerciseCard(exercise, workoutLog);
+            }
+        } else {
+            System.out.println("No workout log found for today. Starting a new session.");
+        }
+    }
+
+ // Load exercises and their sets for the given workout ID (generic method) - no date
     private void loadExercisesForWorkout(Long workoutId) {
         exerciseList.getChildren().clear(); // Clear the current list
         List<Exercise> exercises = exerciseService.getExercisesByWorkoutId(workoutId); // Fetch exercises for the workout
         for (Exercise exercise : exercises) {
-            addExerciseCard(exercise); // Add exercises dynamically
+            addExerciseCard(exercise, null); // No associated workout log
         }
     }
 
  // Add an exercise card for an existing exercise from the database
-    private void addExerciseCard(Exercise exercise) {
+    private void addExerciseCard(Exercise exercise, WorkoutLog workoutLog) {
         VBox exerciseCard = new VBox(5);
         exerciseCard.getStyleClass().add("exercise-card");
 
@@ -132,11 +155,21 @@ public class ExerciseUIController {
         GridPane setGrid = new GridPane();
         setGrid.setHgap(10);
         setGrid.setVgap(5);
-        List<ExerciseSet> sets = exerciseSetService.getSetsByExerciseId(exercise.getId());
+
+        List<ExerciseSet> sets;
+        if (workoutLog != null) {
+            // Load sets for the specific workout log
+            sets = exerciseSetService.getSetsByExerciseAndWorkoutLog(exercise, workoutLog);
+        } else {
+            // Load all sets for the exercise (optional fallback)
+            sets = exerciseSetService.getSetsByExerciseId(exercise.getId());
+        }
+
         int row = 0;
         for (ExerciseSet set : sets) {
             addSetRow(setGrid, row++, set.getWeight(), set.getReps(), sets);
         }
+
         exerciseCard.getChildren().add(setGrid);
 
         // Add "+ REPS" button

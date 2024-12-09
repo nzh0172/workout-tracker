@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import com.example.workout_tracker_2.entity.Workout;
 import com.example.workout_tracker_2.repository.WorkoutRepository;
 
+import jakarta.transaction.Transactional;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +21,11 @@ public class WorkoutService {
         this.workoutRepository = workoutRepository;
     }
     
+    @Transactional
+    public Workout findByIdWithExercises(Long workoutId) {
+        return workoutRepository.findWithExercisesById(workoutId)
+            .orElseThrow(() -> new IllegalArgumentException("Invalid workout ID: " + workoutId));
+    }
 
     public List<Workout> getAllWorkouts() {
         return workoutRepository.findAll();
