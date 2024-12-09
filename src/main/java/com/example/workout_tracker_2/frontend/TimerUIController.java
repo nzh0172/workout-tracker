@@ -86,7 +86,7 @@ public class TimerUIController {
         }
     }
 
-    private void resetTimer() {
+    public void resetTimer() {
         if (timeline != null) {
             timeline.stop();
         }

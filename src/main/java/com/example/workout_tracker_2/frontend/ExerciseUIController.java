@@ -11,12 +11,15 @@ import com.example.workout_tracker_2.service.WorkoutService;
 
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -51,11 +54,7 @@ public class ExerciseUIController {
     private Button addExerciseButton;
 
     @FXML
-    private Button saveButton;
-
-    @FXML
-    private Button pauseButton;
-
+    private Button finishButton, pauseButton, quitButton, resumeButton;
     
     private Long workoutId; // The ID of the current workout session
     
@@ -65,9 +64,27 @@ public class ExerciseUIController {
     private HBox timerContainer; // root node of TimerUI.fxml
     
     @FXML
-    private Label workoutLabel;
+    private Label workoutLabel, pauseLabel;
 
     private boolean isTimerRunning = false; // Keeps track of timer state
+    
+    @FXML
+    private Pane overlay;
+
+    private boolean isPaused = false;
+
+    private void togglePauseOverlay() {
+        isPaused = !isPaused; // Toggle pause state
+        overlay.setVisible(isPaused); // Show or hide the overlay
+        
+        if (isPaused) {
+            pauseButton.setText("▶"); // Change to "Resume"
+            timerController.pauseTimer(); // Pause the timer
+        } else {
+            pauseButton.setText("⏸"); // Change to "Pause"
+            timerController.startTimer(); // Resume the timer
+        }
+    }
     public void initialize() {
         // Handle "Add Exercise" button
         addExerciseButton.setOnAction(event -> addExerciseCard("New Exercise"));
@@ -78,14 +95,7 @@ public class ExerciseUIController {
 
         pauseButton.setOnAction(event -> {
             if (timerController != null) {
-                if (timerController.isRunning) {
-                    timerController.pauseTimer();
-                    pauseButton.setText("▶"); // Change button text to "Play"
-                } else {
-                    timerController.startTimer();
-                    pauseButton.setText("⏸"); // Change button text to "Pause"
-                }
-                isTimerRunning = !isTimerRunning; // Toggle the state
+                togglePauseOverlay(); // Pause or resume workout
             } else {
                 System.err.println("TimerController is null!");
             }
@@ -99,8 +109,10 @@ public class ExerciseUIController {
         }
         
         // Handle "Save" button
-        saveButton.setOnAction(event -> saveWorkout());
+        finishButton.setOnAction(event -> finishWorkout());
     }
+    
+
 
     // Set the workout ID and load the exercises for that workout
     public void setWorkoutId(Long workoutId) {
@@ -302,6 +314,31 @@ public class ExerciseUIController {
         }
     }
 
+    @FXML
+    private void finishWorkout() {
+        // Show a confirmation dialog
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.setTitle("Finish Workout");
+        confirmationAlert.setHeaderText("Are you sure you want to finish the workout?");
+        confirmationAlert.setContentText("Your progress will be saved.");
+
+        // Wait for user response
+        Optional<ButtonType> result = confirmationAlert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            // User confirmed, save the workout
+            saveWorkout();
+            
+          //Reset timer for next session
+            timerController.resetTimer();
+
+            // Redirect to the main UI
+            goToMainUI();
+        } else {
+            // User cancelled, do nothing
+            System.out.println("User canceled finishing the workout.");
+        }
+    }
 
     private void saveWorkout() {
         if (timerController == null) {
@@ -363,7 +400,7 @@ public class ExerciseUIController {
                 exerciseSetService.saveExerciseSet(set);
             }
         });
-
+        
         System.out.println("Workout session saved!");
     }
     
@@ -377,6 +414,38 @@ public class ExerciseUIController {
     public void pauseTimer() {
         if (timerController != null) {
             timerController.pauseTimer();
+        }
+    }
+    
+    @FXML
+    public void goToMainUI() {
+        try {
+            WorkoutApp.showMainFrame(); // Navigate back to the Main Frame
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    //Overlay menu
+    @FXML
+    private void resumeWorkout() {
+        if (isPaused) {
+            togglePauseOverlay(); // Resume workout
+        }
+    }
+
+    @FXML
+    private void quitWorkout() {
+        // Show a confirmation dialog before quitting
+        Alert quitConfirmation = new Alert(Alert.AlertType.CONFIRMATION);
+        quitConfirmation.setTitle("Quit Workout");
+        quitConfirmation.setHeaderText("Are you sure you want to quit?");
+        quitConfirmation.setContentText("Progress will not be saved if you quit.");
+
+        Optional<ButtonType> result = quitConfirmation.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            goToMainUI(); // Navigate back to the main UI
+            timerController.resetTimer();//Reset timer for next session
         }
     }
 }

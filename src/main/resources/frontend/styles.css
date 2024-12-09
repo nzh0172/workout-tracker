@@ -1,7 +1,7 @@
 .root {
     -fx-font-family: "Arial";
 }
-
+i
 .button {
     -fx-background-color: #4CAF50;
     -fx-text-fill: white;
@@ -76,3 +76,5 @@
     -fx-font-weight: bold;
     -fx-text-fill: #4e4b6f; /* Darker purple */
 }
+
+

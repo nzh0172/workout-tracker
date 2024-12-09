@@ -7,6 +7,7 @@ import com.example.workout_tracker_2.service.WorkoutLogService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -45,56 +46,79 @@ public class WorkoutLogUIController {
      * Add a card for each workout log.
      */
     private void addWorkoutLogCard(WorkoutLog workoutLog) {
-        VBox logCard = new VBox(5);
-        logCard.setStyle("-fx-padding: 10; -fx-background-color: #f5f5f5; -fx-border-color: #ccc; -fx-border-radius: 5; -fx-background-radius: 5;");
+        // Outer HBox to separate the left and right sections
+        HBox logCard = new HBox(20);
+        logCard.setStyle("-fx-padding: 15; -fx-background-color: #f5f5f5; -fx-border-color: #ccc; -fx-border-radius: 8; -fx-background-radius: 8;");
+        logCard.setPrefWidth(700);
 
-        // Date and workout title
+        // LEFT SIDE: Date, Workout Name, Timer
+        VBox leftSection = new VBox(15);
+        leftSection.setStyle("-fx-padding: 10; -fx-alignment: TOP_LEFT;");
+
+        // Date Label
         Label dateLabel = new Label(workoutLog.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         dateLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
-        logCard.getChildren().add(dateLabel);
 
-        // Workout name
+        // Workout Name Label
         Label workoutNameLabel = new Label(workoutLog.getWorkout().getName());
-        workoutNameLabel.setStyle("-fx-font-size: 30px; -fx-font-weight: bold;");
-        logCard.getChildren().add(workoutNameLabel);
+        workoutNameLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+        workoutNameLabel.setWrapText(true);
 
-        // Container for exercises
-        VBox exerciseContainer = new VBox(5);
-        exerciseContainer.setStyle("-fx-padding: 5;");
+        // Duration Label with Stopwatch Icon
+        HBox durationBox = new HBox(5);
+        durationBox.setStyle("-fx-alignment: CENTER_LEFT;");
+        Label stopwatchIcon = new Label("\u23F1"); // Unicode stopwatch icon
+        stopwatchIcon.setStyle("-fx-font-size: 16px; -fx-text-fill: red;");
+        Label durationLabel = new Label(formatDuration(workoutLog.getDuration()));
+        durationLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: red;");
+        durationBox.getChildren().addAll(stopwatchIcon, durationLabel);
 
-        // Loop through the exercises for this workout log
+        // Add components to the left section
+        leftSection.getChildren().addAll(dateLabel, workoutNameLabel, durationBox);
+
+        // RIGHT SIDE: Exercises and Sets
+        VBox rightSection = new VBox(10);
+        rightSection.setStyle("-fx-padding: 10");
+        HBox.setHgrow(rightSection, Priority.ALWAYS); // Allow right section to expand dynamically
+
+        
         for (Exercise exercise : workoutLog.getWorkout().getExercises()) {
             VBox exerciseVBox = new VBox(5);
-            exerciseVBox.setStyle("-fx-padding: 10; -fx-background-color: #e8f5e9; -fx-border-color: #c8e6c9;");
+            exerciseVBox.setStyle("-fx-padding: 10; -fx-background-color: #e8f5e9; -fx-border-color: #c8e6c9; -fx-border-radius: 5;");
 
-            // Add the exercise name
+            // Exercise Name
             Label exerciseLabel = new Label(exercise.getName());
-            exerciseLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+            exerciseLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
             exerciseVBox.getChildren().add(exerciseLabel);
 
-            // Filter sets that belong to this specific log
+            // Filter and display sets for the current workout log
             List<ExerciseSet> filteredSets = exercise.getSets().stream()
-                .filter(set -> set.getWorkoutLog() != null) // Ensure WorkoutLog is not null
-                .filter(set -> set.getWorkoutLog().getId().equals(workoutLog.getId())) // Only sets tied to this log
+                .filter(set -> set.getWorkoutLog() != null && set.getWorkoutLog().getId().equals(workoutLog.getId())) // Ensure sets belong to this log
                 .toList();
 
-            // Display filtered sets in the UI
             for (ExerciseSet set : filteredSets) {
                 Label setLabel = new Label(set.getReps() + " x " + set.getWeight() + "kg");
-                setLabel.setStyle("-fx-font-size: 15px");
-
-                exerciseVBox.getChildren().add(setLabel); // Add set details under the exercise
+                setLabel.setStyle("-fx-font-size: 14px;");
+                exerciseVBox.getChildren().add(setLabel);
             }
 
-            // Add the exerciseVBox (with its name and sets) to the exerciseContainer
-            exerciseContainer.getChildren().add(exerciseVBox);
+            // Add each exercise VBox to the right section
+            rightSection.getChildren().add(exerciseVBox);
         }
 
-        // Add the exerciseContainer to the logCard
-        logCard.getChildren().add(exerciseContainer);
+        // Add both sections to the log card
+        logCard.getChildren().addAll(leftSection, rightSection);
 
-        // Add the logCard to the main container
+        // Add the log card to the main container
         logContainer.getChildren().add(logCard);
+    }
+
+    // Helper to format duration
+    private String formatDuration(int totalSeconds) {
+        int hours = totalSeconds / 3600;
+        int minutes = (totalSeconds % 3600) / 60;
+        int seconds = totalSeconds % 60;
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 
     @FXML
