@@ -9,6 +9,8 @@ import com.example.workout_tracker_2.service.ExerciseSetService;
 import com.example.workout_tracker_2.service.WorkoutLogService;
 import com.example.workout_tracker_2.service.WorkoutService;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -17,10 +19,13 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -52,6 +57,9 @@ public class ExerciseUIController {
 
     @FXML
     private Button addExerciseButton;
+    
+    @FXML
+    private BorderPane mainContent;
 
     @FXML
     private Button finishButton, pauseButton, quitButton, resumeButton;
@@ -67,13 +75,16 @@ public class ExerciseUIController {
     private Label workoutLabel, pauseLabel;
 
     @FXML
-    private Pane overlay;
-
+    private Pane pauseOverlay, countdownOverlay; // Overlay for the countdown timer
+    
+    @FXML
+    private Label countdownLabel; // Label to display the countdown number
+    
+    
     private boolean isPaused = false;
-
     private void togglePauseOverlay() {
         isPaused = !isPaused; // Toggle pause state
-        overlay.setVisible(isPaused); // Show or hide the overlay
+        pauseOverlay.setVisible(isPaused); // Show or hide the overlay
         
         if (isPaused) {
             pauseButton.setText("▶"); // Change to "Resume"
@@ -100,11 +111,7 @@ public class ExerciseUIController {
         });
 
         // Timer initialization
-        if (timerController != null) {
-            timerController.startTimer(); // Start the timer automatically
-        } else {
-            System.err.println("TimerController is null!");
-        }
+        startWorkoutCountdown();
         
         // Handle "Save" button
         finishButton.setOnAction(event -> finishWorkout());
@@ -444,6 +451,40 @@ public class ExerciseUIController {
         if (result.isPresent() && result.get() == ButtonType.OK) {
             goToMainUI(); // Navigate back to the main UI
             timerController.resetTimer();//Reset timer for next session
+        }
+    }
+    
+    //Countdown overlay
+    private int countdownValue = 3; // Starting value for countdown
+
+    public void startWorkoutCountdown() {
+        // Show the overlay
+        countdownOverlay.setVisible(true);
+        mainContent.setDisable(true); // Disable interaction with main content
+
+        // Create the countdown timeline
+        Timeline countdownTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            countdownLabel.setText(String.valueOf(countdownValue));
+            countdownValue--;
+
+            if (countdownValue < 0) {
+                // Countdown finished
+                countdownOverlay.setVisible(false); // Hide overlay
+                mainContent.setDisable(false); // Enable main content
+                countdownValue = 3; // Reset the countdown
+                startWorkout(); // Start the workout
+            }
+        }));
+
+        countdownTimeline.setCycleCount(4); // Countdown from 3 to 0
+        countdownTimeline.play();
+    }
+    
+    private void startWorkout() {
+        System.out.println("Workout Started!");
+        // Add your logic to start the workout, e.g., start the timer
+        if (timerController != null) {
+            timerController.startTimer();
         }
     }
 }
