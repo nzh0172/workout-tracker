@@ -46,6 +46,12 @@ public class WorkoutLogController {
         return ResponseEntity.noContent().build();
     }
     
+    @DeleteMapping
+    public ResponseEntity<String> deleteAllLogs() {
+        workoutLogService.deleteAllLogs();
+        return ResponseEntity.ok("All workout logs have been deleted.");
+    }
+    
     @PutMapping("/{id}")
     public ResponseEntity<WorkoutLog> updateWorkoutLog(@PathVariable Long id, @RequestBody WorkoutLog updatedLog) {
         Optional<WorkoutLog> existingLog = workoutLogService.findById(id);

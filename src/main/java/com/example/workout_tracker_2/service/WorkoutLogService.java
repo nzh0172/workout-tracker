@@ -27,6 +27,17 @@ public class WorkoutLogService {
     public List<WorkoutLog> getAllLogs() {
         return workoutLogRepository.findAll();
     }
+    
+    @Transactional
+    public List<WorkoutLog> getAllLogsWithDetails() {
+        List<WorkoutLog> logs = workoutLogRepository.findAll(Sort.by(Sort.Direction.DESC, "date"));
+        logs.forEach(log -> {
+            log.getWorkout().getExercises().forEach(exercise -> {
+                exercise.getSets().size(); // Force initialization of the sets collection
+            });
+        });
+        return logs;
+    }
 
     public WorkoutLog saveLog(WorkoutLog workoutLog) {
         return workoutLogRepository.save(workoutLog);
@@ -54,6 +65,10 @@ public class WorkoutLogService {
 	     List<WorkoutLog> logs = workoutLogRepository.findByWorkoutIdAndDate(workoutId, date, Sort.by(Sort.Direction.DESC, "id"));
 	     return logs.isEmpty() ? Optional.empty() : Optional.of(logs.get(0)); // Return the most recent log
 	 }
+
+	public void deleteAllLogs() {
+		workoutLogRepository.deleteAll();
+	}
 
 
     
