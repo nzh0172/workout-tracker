@@ -103,4 +103,5 @@ public class Exercise {
     public String toString() {
         return "Exercise{id=" + id + ", name='" + name + "'}";
     }
+
 }

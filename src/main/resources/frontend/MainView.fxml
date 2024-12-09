@@ -1,19 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.workout_tracker_2.frontend.MainUIController">
+<VBox alignment="CENTER" prefHeight="700.0" prefWidth="400.0" spacing="20" style="-fx-padding: 10; -fx-background-color: #f5f5f5;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.workout_tracker_2.frontend.MainUIController">
+  
+  <!-- Header -->
   <children>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
-      <children>
-            <Button fx:id="pushButton" layoutX="27.0" layoutY="44.0" mnemonicParsing="false" prefHeight="257.0" prefWidth="172.0" text="Push" />
-            <Button layoutX="535.0" layoutY="326.0" mnemonicParsing="false" onAction="#goToWorkoutLogUI" prefHeight="43.0" prefWidth="77.0" text="Logs" textAlignment="CENTER" wrapText="true" />
-            <Button fx:id="pullButton" layoutX="234.0" layoutY="44.0" mnemonicParsing="false" prefHeight="257.0" prefWidth="172.0" text="Pull" />
-            <Button layoutX="440.0" layoutY="326.0" mnemonicParsing="false" onAction="#goToExercisesUI" prefHeight="43.0" prefWidth="77.0" text="Exercises" textAlignment="CENTER" wrapText="true" />
-            <Button fx:id="legsButton" layoutX="431.0" layoutY="44.0" mnemonicParsing="false" prefHeight="257.0" prefWidth="172.0" text="Legs" />
-      </children>
-    </AnchorPane>
+    <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Start your workout!" />
+
+    <!-- Large Workout Buttons -->
+    <VBox alignment="CENTER" prefHeight="460.0" prefWidth="366.0" spacing="10">
+      <Button fx:id="pushButton" contentDisplay="CENTER" graphicTextGap="10.0" prefHeight="180.0" prefWidth="300.0" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-background-radius: 20; -fx-font-size: 30px;" text="Push" textAlignment="CENTER">
+        <graphic>
+          <ImageView fitHeight="128.0" fitWidth="108.0" opacity="0.7" pickOnBounds="true" preserveRatio="true">
+            <image>
+              <Image url="@../images/push.png" />
+            </image>
+          </ImageView>
+        </graphic>
+      </Button>
+
+      <Button fx:id="pullButton" contentDisplay="CENTER" prefHeight="180.0" prefWidth="300.0" style="-fx-background-color: #FF9800; -fx-text-fill: white; -fx-background-radius: 20; -fx-font-size: 30px;" text="Pull">
+        <graphic>
+          <ImageView fitHeight="136.0" fitWidth="122.0" opacity="0.7" pickOnBounds="true" preserveRatio="true">
+            <image>
+              <Image url="@../images/pull.png" />
+            </image>
+          </ImageView>
+        </graphic>
+      </Button>
+
+      <Button fx:id="legsButton" contentDisplay="CENTER" prefHeight="180.0" prefWidth="300.0" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-background-radius: 20; -fx-font-size: 30px;" text="Legs">
+        <graphic>
+          <ImageView fitHeight="118.0" fitWidth="115.0" opacity="0.7" pickOnBounds="true" preserveRatio="true">
+            <image>
+              <Image url="@../images/legs.png" />
+            </image>
+          </ImageView>
+        </graphic>
+      </Button>
+    </VBox>
+
+    <!-- Smaller Buttons for Exercises and Logs -->
+    <HBox alignment="CENTER" spacing="20">
+      <Button fx:id="exercisesButton" onAction="#goToExercisesUI" prefHeight="50.0" prefWidth="100.0" style="-fx-background-color: #FFC107; -fx-text-fill: black; -fx-background-radius: 15; -fx-font-size: 14px;" text="Add/View Exercises" textAlignment="CENTER" wrapText="true" />
+      <Button fx:id="logsButton" onAction="#goToWorkoutLogUI" prefHeight="50.0" prefWidth="100.0" style="-fx-background-color: #FF5722; -fx-text-fill: white; -fx-background-radius: 15; -fx-font-size: 14px;" text="Logs" />
+    </HBox>
   </children>
 </VBox>

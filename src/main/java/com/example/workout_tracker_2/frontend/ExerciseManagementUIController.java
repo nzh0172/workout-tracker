@@ -36,6 +36,9 @@ public class ExerciseManagementUIController {
 
     @FXML
     private Button deleteButton;
+    
+    @FXML
+    private ComboBox<String> filterDropdown;
 
     @Autowired
     private ExerciseService exerciseService;
@@ -47,9 +50,12 @@ public class ExerciseManagementUIController {
 
     @FXML
     public void initialize() {
-        // Load workouts into the ComboBox
-        //workoutComboBox.setItems(FXCollections.observableArrayList(workoutService.getAllWorkouts()));
+        // Populate the dropdown
+        filterDropdown.getItems().addAll("All", "Push", "Pull", "Legs");
+        filterDropdown.setValue("All"); // Default selection
 
+        // Add listener to handle filtering
+        filterDropdown.setOnAction(event -> filterExercises(filterDropdown.getValue()));
     	
         // Configure table columns
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
@@ -197,6 +203,20 @@ public class ExerciseManagementUIController {
         }
 
         alert.showAndWait();
+    }
+    
+    private void filterExercises(String workoutName) {
+        List<Exercise> allExercises = exerciseService.getAllExercises();
+
+        // Filter exercises by workout name
+        List<Exercise> filteredExercises = "All".equals(workoutName)
+            ? allExercises
+            : allExercises.stream()
+                          .filter(exercise -> exercise.getWorkout().getName().equalsIgnoreCase(workoutName))
+                          .toList();
+
+        // Update the table
+        exerciseTable.getItems().setAll(filteredExercises);
     }
     
     @FXML

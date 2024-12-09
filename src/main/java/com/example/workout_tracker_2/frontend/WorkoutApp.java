@@ -27,6 +27,10 @@ public class WorkoutApp extends Application {
         springContext = new SpringApplicationBuilder(WorkoutApp.class).web(WebApplicationType.NONE).run();
         springFXMLLoader = new SpringFXMLLoader(springContext);
     }
+    
+    private static final double WINDOW_WIDTH = 400;
+    private static final double WINDOW_HEIGHT = 700;
+    
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -36,8 +40,9 @@ public class WorkoutApp extends Application {
 
             System.out.println("Loading MainView.fxml...");
             Parent root = springFXMLLoader.load("/frontend/MainView.fxml");
+            System.out.println(getClass().getResource("/images/push.png")); 
             
-            Scene scene = new Scene(root);
+            Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
             //Load CSS
             scene.getStylesheets().add(getClass().getResource("/frontend/styles.css").toExternalForm());
 
@@ -45,25 +50,32 @@ public class WorkoutApp extends Application {
             primaryStage.setScene(scene);
             primaryStage.setTitle("Workout Tracker");
             primaryStage.show();
+            primaryStage.setResizable(false);
+            
         } catch (Exception e) {
             System.err.println("Error loading MainView.fxml:");
             e.printStackTrace();
             Platform.exit();
         }
     }
+    
 
     public static void showMainFrame() throws Exception {
         Parent root = springFXMLLoader.load("/frontend/MainView.fxml");
-        primaryStage.setScene(new Scene(root));
+        primaryStage.setScene(new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT));
         primaryStage.setTitle("Workout Tracker - Main");
         primaryStage.show();
+        primaryStage.setResizable(false);
+
     }
 
     public static void showWorkoutLogFrame() throws Exception {
         Parent root = springFXMLLoader.load("/frontend/ViewWorkoutLogs.fxml");
-        primaryStage.setScene(new Scene(root));
+        primaryStage.setScene(new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT));
         primaryStage.setTitle("Workout Tracker - Log");
         primaryStage.show();
+        primaryStage.setResizable(false);
+
     }
 
     public static void showSessionsFrame(Long workoutId) throws Exception {
@@ -81,16 +93,20 @@ public class WorkoutApp extends Application {
         controller.setWorkoutId(workoutId);
         
         // Set the new scene on the primaryStage
-        primaryStage.setScene(new Scene(root, 400, 700));
+        primaryStage.setScene(new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT));
         primaryStage.setTitle("Log Workout - Workout ID: " + workoutId);
         primaryStage.show();
+        primaryStage.setResizable(false);
+
     }
 
     public static void showExerciseListFrame() throws Exception {
         Parent root = springFXMLLoader.load("/frontend/ViewExerciseList.fxml");
-        primaryStage.setScene(new Scene(root));
+        primaryStage.setScene(new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT));
         primaryStage.setTitle("Workout Tracker - Exercises");
         primaryStage.show();
+        primaryStage.setResizable(false);
+
     }
 
     //App can now properly quit without having to force quit

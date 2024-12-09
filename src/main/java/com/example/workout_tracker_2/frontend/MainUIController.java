@@ -10,13 +10,7 @@ import javafx.scene.control.Button;
 public class MainUIController {
 	
     @FXML
-    private Button pushButton;
-
-    @FXML
-    private Button pullButton;
-
-    @FXML
-    private Button legsButton;
+    private Button pushButton, pullButton, legsButton, logsButton, exercisesButton;
 
     @FXML
     public void initialize() {

@@ -66,8 +66,6 @@ public class ExerciseUIController {
     @FXML
     private Label workoutLabel, pauseLabel;
 
-    private boolean isTimerRunning = false; // Keeps track of timer state
-    
     @FXML
     private Pane overlay;
 
@@ -184,11 +182,11 @@ public class ExerciseUIController {
 
         exerciseCard.getChildren().add(setGrid);
 
-        // Add "+ REPS" button
-        Button addRepsButton = new Button("+ REPS");
-        addRepsButton.getStyleClass().add("add-reps-button");
-        addRepsButton.setOnAction(event -> addSetRow(setGrid, setGrid.getRowCount(), null, null, sets));
-        exerciseCard.getChildren().add(addRepsButton);
+        // Add "+ SETS" button
+        Button addSetsButton = new Button("+ SETS");
+        addSetsButton.getStyleClass().add("add-reps-button");
+        addSetsButton.setOnAction(event -> addSetRow(setGrid, setGrid.getRowCount(), null, null, sets));
+        exerciseCard.getChildren().add(addSetsButton);
 
         exerciseList.getChildren().add(exerciseCard);
     }
