@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -31,8 +32,10 @@ public class WorkoutLog {
 
     // JavaFX properties
     @Transient
+    @JsonIgnore // This value is not recorded in JSON
     private final ObjectProperty<LocalDate> dateProperty = new SimpleObjectProperty<>();
     @Transient
+    @JsonIgnore // This value is not recorded in JSON
     private final IntegerProperty durationProperty = new SimpleIntegerProperty();
 
     // Default Constructor

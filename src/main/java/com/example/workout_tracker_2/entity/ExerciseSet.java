@@ -1,6 +1,7 @@
 package com.example.workout_tracker_2.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
 import javafx.beans.property.DoubleProperty;
@@ -28,9 +29,11 @@ public class ExerciseSet {
     private double weight; // Single field for JPA and UI
 
     @Transient
+    @JsonIgnore // This value is not recorded in JSON
     private final IntegerProperty repsProperty = new SimpleIntegerProperty(); // For JavaFX binding
 
     @Transient
+    @JsonIgnore // This value is not recorded in JSON
     private final DoubleProperty weightProperty = new SimpleDoubleProperty(); // For JavaFX binding
 
     // Default Constructor
