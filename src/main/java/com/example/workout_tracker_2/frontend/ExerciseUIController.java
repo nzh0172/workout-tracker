@@ -192,7 +192,7 @@ public class ExerciseUIController {
             System.out.println("Exercise with name '" + exerciseName + "' already exists in the UI.");
             return; // Prevent adding duplicate exercises
         }
-
+        
         VBox exerciseCard = new VBox(5);
         exerciseCard.getStyleClass().add("exercise-card");
 

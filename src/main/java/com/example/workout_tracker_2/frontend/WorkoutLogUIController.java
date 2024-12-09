@@ -49,12 +49,12 @@ public class WorkoutLogUIController {
         logCard.setStyle("-fx-padding: 10; -fx-background-color: #f5f5f5; -fx-border-color: #ccc; -fx-border-radius: 5; -fx-background-radius: 5;");
 
         // Date and workout title
-        Label dateLabel = new Label("Date: " + workoutLog.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        Label dateLabel = new Label(workoutLog.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         dateLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
         logCard.getChildren().add(dateLabel);
 
         // Workout name
-        Label workoutNameLabel = new Label("Workout: " + workoutLog.getWorkout().getName());
+        Label workoutNameLabel = new Label(workoutLog.getWorkout().getName());
         workoutNameLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
         logCard.getChildren().add(workoutNameLabel);
 
@@ -62,23 +62,19 @@ public class WorkoutLogUIController {
         VBox exerciseContainer = new VBox(5);
         exerciseContainer.setStyle("-fx-padding: 5;");
 
+     // Loop through the exercises for this workout log
         for (Exercise exercise : workoutLog.getWorkout().getExercises()) {
-            VBox exerciseBox = new VBox(5);
-            exerciseBox.setStyle("-fx-padding: 5; -fx-background-color: #e8f5e9; -fx-border-color: #8bc34a; -fx-border-radius: 5;");
+            // Filter sets that belong to this specific log
+            List<ExerciseSet> filteredSets = exercise.getSets().stream()
+                .filter(set -> set.getWorkoutLog() != null) // Ensure WorkoutLog is not null
+                .filter(set -> set.getWorkoutLog().getId().equals(workoutLog.getId())) // Only sets tied to this log
+                .toList();
 
-            // Exercise name
-            Label exerciseNameLabel = new Label(exercise.getName());
-            exerciseNameLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
-            exerciseBox.getChildren().add(exerciseNameLabel);
-
-            // Sets
-            for (ExerciseSet set : exercise.getSets()) {
+            // Display filtered sets in the UI
+            for (ExerciseSet set : filteredSets) {
                 Label setLabel = new Label(set.getReps() + " x " + set.getWeight() + "kg");
-                setLabel.setStyle("-fx-font-size: 16px;");
-                exerciseBox.getChildren().add(setLabel);
+                exerciseContainer.getChildren().add(setLabel);
             }
-
-            exerciseContainer.getChildren().add(exerciseBox);
         }
 
         logCard.getChildren().add(exerciseContainer);
