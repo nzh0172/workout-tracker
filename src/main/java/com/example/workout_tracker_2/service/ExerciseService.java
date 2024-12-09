@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.workout_tracker_2.entity.Exercise;
+import com.example.workout_tracker_2.entity.Workout;
 import com.example.workout_tracker_2.repository.ExerciseRepository;
 
 import java.util.List;
@@ -38,6 +39,10 @@ public class ExerciseService {
     
     public Optional<Exercise> findById(Long id) {
         return exerciseRepository.findById(id);
+    }
+    
+    public Optional<Exercise> findByNameAndWorkout(String name, Workout workout) {
+        return exerciseRepository.findByNameAndWorkout(name, workout);
     }
 
     public Exercise save(Exercise exercise) {

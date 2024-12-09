@@ -148,8 +148,18 @@ public class ExerciseUIController {
         exerciseList.getChildren().add(exerciseCard);
     }
 
-    // Add a new exercise card dynamically for a new exercise
     private void addExerciseCard(String exerciseName) {
+        // Check if an exercise with the same name already exists in the UI
+        boolean existsInUI = exerciseList.getChildren().stream()
+                .map(node -> (VBox) node)
+                .map(vbox -> (TextField) vbox.getChildren().get(0))
+                .anyMatch(textField -> textField.getText().equalsIgnoreCase(exerciseName));
+
+        if (existsInUI) {
+            System.out.println("Exercise with name '" + exerciseName + "' already exists in the UI.");
+            return; // Prevent adding duplicate exercises
+        }
+
         VBox exerciseCard = new VBox(5);
         exerciseCard.getStyleClass().add("exercise-card");
 
@@ -275,17 +285,19 @@ public class ExerciseUIController {
             TextField exerciseTitle = (TextField) exerciseCard.getChildren().get(0);
             String exerciseName = exerciseTitle.getText();
 
-            // Create a new Exercise
-            Exercise exercise = new Exercise();
-            exercise.setName(exerciseName);
-
             // Fetch the Workout entity using workoutId
             Workout workout = workoutService.findById(workoutId)
                     .orElseThrow(() -> new IllegalArgumentException("Invalid workout ID: " + workoutId));
 
-            // Link the Exercise to the Workout
-            exercise.setWorkout(workout);
-            exerciseService.saveExercise(exercise);
+            // Check if the exercise already exists for this workout
+            Exercise exercise = exerciseService.findByNameAndWorkout(exerciseName, workout)
+                    .orElseGet(() -> {
+                        // Create a new Exercise if it doesn't exist
+                        Exercise newExercise = new Exercise();
+                        newExercise.setName(exerciseName);
+                        newExercise.setWorkout(workout);
+                        return exerciseService.save(newExercise); // Save the new Exercise
+                    });
 
             // Save the Exercise Sets
             GridPane setGrid = (GridPane) exerciseCard.getChildren().get(1);
