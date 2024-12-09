@@ -18,14 +18,16 @@ public class TimerUIController {
     @FXML
     private Label timerLabel;
 
-    @FXML
-    private Button startPauseButton;
+    //@FXML
+    //private Button startPauseButton;
 
     @FXML
     private Button resetButton;
 
     private Timeline timeline;
     private IntegerProperty elapsedTimeProperty = new SimpleIntegerProperty(0);
+    
+    public boolean isRunning = false;
 
     public void initialize() {
         timerLabel.textProperty().bind(Bindings.createStringBinding(
@@ -38,12 +40,13 @@ public class TimerUIController {
             timerLabel.getParent().getProperties().put("timerController", this);
         }
         
+        /*
         //Set button actions
         startPauseButton.setText("Pause");
         startPauseButton.setOnAction(event -> handleStartPause());
         
         resetButton.setOnAction(event -> resetTimer());
-
+         */
         // Initialize the timeline
         setupTimeline();
     }
@@ -55,7 +58,8 @@ public class TimerUIController {
         timeline.setCycleCount(Animation.INDEFINITE);
     }
     
-    private void handleStartPause() {
+    /*
+    public void handleStartPause() {
         if (timeline.getStatus() == Animation.Status.RUNNING) {
             // If the timer is running, pause it
             pauseTimer();
@@ -66,16 +70,19 @@ public class TimerUIController {
             startPauseButton.setText("Pause");
         }
     }
+    */
 
     public void startTimer() {
         if (timeline != null && timeline.getStatus() != Animation.Status.RUNNING) {
             timeline.play();
+            isRunning = true;
         }
     }
 
     public void pauseTimer() {
         if (timeline != null && timeline.getStatus() == Animation.Status.RUNNING) {
             timeline.pause();
+            isRunning = false;
         }
     }
 
@@ -84,7 +91,7 @@ public class TimerUIController {
             timeline.stop();
         }
         elapsedTimeProperty.set(0);
-        startPauseButton.setText("Start");
+        //startPauseButton.setText("Start");
     }
 
     private String formatElapsedTime(int seconds) {

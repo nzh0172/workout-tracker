@@ -6,6 +6,8 @@
 
 <HBox fx:id="timerContainer" alignment="CENTER" spacing="10" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.workout_tracker_2.frontend.TimerUIController">
     <Label fx:id="timerLabel" style="-fx-font-size: 20px;" text="00:00:00" />
+    <!--  Timer debugging tool
     <Button fx:id="startPauseButton" text="Start" />
     <Button fx:id="resetButton" text="Reset" />
+    -->
 </HBox>

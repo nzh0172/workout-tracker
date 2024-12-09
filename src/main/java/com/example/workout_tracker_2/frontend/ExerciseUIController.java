@@ -60,6 +60,7 @@ public class ExerciseUIController {
     @FXML
     private Label workoutLabel;
 
+    private boolean isTimerRunning = false; // Keeps track of timer state
     public void initialize() {
         // Handle "Add Exercise" button
         addExerciseButton.setOnAction(event -> addExerciseCard("New Exercise"));
@@ -68,12 +69,26 @@ public class ExerciseUIController {
         // Look up the TimerUIController from the included FXML
         timerController = (TimerUIController) timerContainer.getProperties().get("timerController");
 
-        if (timerController != null) {
-            timerController.startTimer(); // Start the timer immediately for testing
-            System.out.println("timerContainer loaded successfully!");
+        pauseButton.setOnAction(event -> {
+            if (timerController != null) {
+                if (timerController.isRunning) {
+                    timerController.pauseTimer();
+                    pauseButton.setText("▶"); // Change button text to "Play"
+                } else {
+                    timerController.startTimer();
+                    pauseButton.setText("⏸"); // Change button text to "Pause"
+                }
+                isTimerRunning = !isTimerRunning; // Toggle the state
+            } else {
+                System.err.println("TimerController is null!");
+            }
+        });
 
+        // Timer initialization
+        if (timerController != null) {
+            timerController.startTimer(); // Start the timer automatically
         } else {
-            System.err.println("TimerUIController is null!");
+            System.err.println("TimerController is null!");
         }
         
         // Handle "Save" button
