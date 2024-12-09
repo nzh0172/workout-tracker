@@ -2,9 +2,12 @@ package com.example.workout_tracker_2.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -29,6 +32,11 @@ public class WorkoutLog {
 
     @Column(nullable = false)
     private int duration;
+    
+    @OneToMany(mappedBy = "workoutLog", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<ExerciseSet> exerciseSets = new ArrayList<>();
+    
 
     // JavaFX properties
     @Transient
@@ -114,6 +122,14 @@ public class WorkoutLog {
     public void setDurationProperty(int duration) {
         this.durationProperty.set(duration);
         this.duration = duration; // Sync JPA field
+    }
+    
+    public List<ExerciseSet> getExerciseSets() {
+        return exerciseSets;
+    }
+
+    public void setExerciseSets(List<ExerciseSet> exerciseSets) {
+        this.exerciseSets = exerciseSets;
     }
 
     @Override

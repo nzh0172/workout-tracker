@@ -270,7 +270,6 @@ public class ExerciseUIController {
     }
 
 
- // Save workout session to the database
     private void saveWorkout() {
         if (timerController == null) {
             System.err.println("TimerController is null! Elapsed time is not recorded.");
@@ -280,26 +279,33 @@ public class ExerciseUIController {
         int elapsedTimeInSeconds = timerController.getElapsedTime();
         System.out.println("Elapsed Time: " + elapsedTimeInSeconds + " seconds");
 
+        // Fetch the Workout entity
+        Workout workout = workoutService.findById(workoutId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid workout ID: " + workoutId));
+
+        // Create and save the WorkoutLog
+        final WorkoutLog workoutLog = new WorkoutLog();
+        workoutLog.setWorkout(workout);
+        workoutLog.setDate(LocalDate.now());
+        workoutLog.setDuration(elapsedTimeInSeconds);
+        workoutLogService.saveLog(workoutLog); // Save the WorkoutLog first
+
+        // Iterate through the exercises and their sets
         exerciseList.getChildren().forEach(node -> {
             VBox exerciseCard = (VBox) node;
             TextField exerciseTitle = (TextField) exerciseCard.getChildren().get(0);
             String exerciseName = exerciseTitle.getText();
 
-            // Fetch the Workout entity using workoutId
-            Workout workout = workoutService.findById(workoutId)
-                    .orElseThrow(() -> new IllegalArgumentException("Invalid workout ID: " + workoutId));
-
             // Check if the exercise already exists for this workout
             Exercise exercise = exerciseService.findByNameAndWorkout(exerciseName, workout)
                     .orElseGet(() -> {
-                        // Create a new Exercise if it doesn't exist
+                        // Create a new Exercise if not found
                         Exercise newExercise = new Exercise();
                         newExercise.setName(exerciseName);
                         newExercise.setWorkout(workout);
-                        return exerciseService.save(newExercise); // Save the new Exercise
+                        return exerciseService.save(newExercise);
                     });
 
-            // Save the Exercise Sets
             GridPane setGrid = (GridPane) exerciseCard.getChildren().get(1);
             for (int i = 0; i < setGrid.getRowCount(); i++) {
                 TextField kgField = (TextField) setGrid.getChildren().get(i * 3); // Adjust based on structure
@@ -317,20 +323,13 @@ public class ExerciseUIController {
                 }
 
                 ExerciseSet set = new ExerciseSet();
-                set.setWeight(weight);
-                set.setReps(reps);
-                set.setExercise(exercise); // Link the set to the exercise
+                set.setWeight(weight != null ? weight : 0.0); // Default value to avoid nulls
+                set.setReps(reps != null ? reps : 0); // Default value to avoid nulls
+                set.setExercise(exercise);
+                set.setWorkoutLog(workoutLog); // Link the set to the saved WorkoutLog
                 exerciseSetService.saveExerciseSet(set);
             }
         });
-
-        // Log the workout
-        WorkoutLog workoutLog = new WorkoutLog();
-        workoutLog.setWorkout(workoutService.findById(workoutId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid workout ID: " + workoutId)));
-        workoutLog.setDate(LocalDate.now());
-        workoutLog.setDuration(elapsedTimeInSeconds);
-        workoutLogService.saveLog(workoutLog);
 
         System.out.println("Workout session saved!");
     }

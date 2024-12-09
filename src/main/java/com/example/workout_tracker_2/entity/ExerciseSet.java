@@ -21,6 +21,12 @@ public class ExerciseSet {
     @JoinColumn(name = "exercise_id", nullable = false)
     @JsonBackReference
     private Exercise exercise;
+    
+    @ManyToOne
+    @JoinColumn(name = "workout_log_id", nullable = true) // Nullable for backward compatibility
+    @JsonBackReference
+    private WorkoutLog workoutLog;
+
 
     @Column(name = "reps", nullable = false)
     private int reps; // Single field for JPA and UI
@@ -110,6 +116,14 @@ public class ExerciseSet {
 
     public DoubleProperty weightProperty() {
         return weightProperty;
+    }
+    
+    public WorkoutLog getWorkoutLog() {
+        return workoutLog;
+    }
+
+    public void setWorkoutLog(WorkoutLog workoutLog) {
+        this.workoutLog = workoutLog;
     }
 
     @Override
