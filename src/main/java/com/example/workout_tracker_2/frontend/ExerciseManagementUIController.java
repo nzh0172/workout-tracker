@@ -50,13 +50,7 @@ public class ExerciseManagementUIController {
 
     @FXML
     public void initialize() {
-        // Populate the dropdown
-        filterDropdown.getItems().addAll("All", "Push", "Pull", "Legs");
-        filterDropdown.setValue("All"); // Default selection
 
-        // Add listener to handle filtering
-        filterDropdown.setOnAction(event -> filterExercises(filterDropdown.getValue()));
-    	
         // Configure table columns
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
 
@@ -64,6 +58,14 @@ public class ExerciseManagementUIController {
         loadExercises();
         
         //exercises.forEach(e -> System.out.println("Exercise: " + e.getNameValue()));
+        
+        // Populate the dropdown
+        filterDropdown.getItems().addAll("All", "Push", "Pull", "Legs");
+        filterDropdown.setValue("All"); // Default selection
+
+        // Add listener to handle filtering
+        filterDropdown.setOnAction(event -> filterExercises(filterDropdown.getValue()));
+
 
         // Add button event
         addButton.setOnAction(event -> addExercise());
@@ -79,11 +81,11 @@ public class ExerciseManagementUIController {
         if (exerciseList != null) {
             exercises.addAll(exerciseList);
         }
-        exerciseTable.setItems(exercises);
+        exerciseTable.setItems(exercises); // Refresh table items  
         System.out.println("Fetched exercises: " + exerciseList);
     }
 
-    private void addExercise() {
+    public void addExercise() {
         // Create the dialog
         Dialog<Exercise> dialog = new Dialog<>();
         dialog.setTitle("Add Exercise");
@@ -146,7 +148,7 @@ public class ExerciseManagementUIController {
         });
     }
 
-    private void deleteExercise() {
+    public void deleteExercise() {
         Exercise selectedExercise = exerciseTable.getSelectionModel().getSelectedItem();
 
         if (selectedExercise != null) {
@@ -160,15 +162,23 @@ public class ExerciseManagementUIController {
             confirmationDialog.showAndWait().ifPresent(response -> {
                 if (response == ButtonType.OK) {
                     try {
+                        // Debugging
+                        System.out.println("Deleting exercise with ID: " + selectedExercise.getId());
+
                         // Call the backend to delete
                         exerciseService.deleteExercise(selectedExercise.getId());
+                        
+                        exercises.remove(selectedExercise);
+                        
+                        exerciseTable.refresh();
+                        
 
-                        // Reload the table
-                        loadExercises();
+                        // Reload based on current filter
 
                         showAlert(Alert.AlertType.INFORMATION, "Success", "Exercise deleted successfully.");
                     } catch (Exception e) {
                         showAlert(Alert.AlertType.WARNING, "Error", "Failed to delete exercise: " + e.getMessage());
+                        e.printStackTrace();
                     }
                 }
             });
@@ -218,6 +228,7 @@ public class ExerciseManagementUIController {
         // Update the table
         exerciseTable.getItems().setAll(filteredExercises);
     }
+
     
     @FXML
     public void goToMainUI() {

@@ -22,7 +22,7 @@
         <!-- Scrollable exercise list in the center -->
         <center>
             <ScrollPane fx:id="exerciseScrollPane" fitToWidth="true" style="-fx-padding: 10;">
-                <VBox fx:id="exerciseList" spacing="10" style="-fx-background-color: white; -fx-padding: 10;">
+                <VBox fx:id="exerciseList" stylesheets="@styles.css" spacing="10" style="-fx-background-color: white; -fx-padding: 10;">
                     <!-- Dynamic exercise cards will be added here -->
                 </VBox>
             </ScrollPane>

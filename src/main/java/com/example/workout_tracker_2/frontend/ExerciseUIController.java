@@ -19,6 +19,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -76,6 +77,7 @@ public class ExerciseUIController {
 
     @FXML
     private Pane pauseOverlay, countdownOverlay; // Overlay for the countdown timer
+    private final GaussianBlur blurEffect = new GaussianBlur(); // Blur the overlay
     
     @FXML
     private Label countdownLabel; // Label to display the countdown number
@@ -89,9 +91,13 @@ public class ExerciseUIController {
         if (isPaused) {
             pauseButton.setText("▶"); // Change to "Resume"
             timerController.pauseTimer(); // Pause the timer
+            blurEffect.setRadius(10);
+            mainContent.setEffect(blurEffect);
         } else {
             pauseButton.setText("⏸"); // Change to "Pause"
             timerController.startTimer(); // Resume the timer
+            mainContent.setEffect(null);
+
         }
     }
     public void initialize() {
@@ -217,13 +223,16 @@ public class ExerciseUIController {
         TextField exerciseTitle = new TextField(exerciseName);
         exerciseTitle.getStyleClass().add("exercise-title");
         exerciseCard.getChildren().add(exerciseTitle);
+        
+        exerciseTitle.getStyleClass().add("exercise-title");
+
 
         // Add input fields for the first set
         GridPane setGrid = new GridPane();
         setGrid.setHgap(10);
         setGrid.setVgap(5);
         List<ExerciseSet> sets = new ArrayList<>();
-        addSetRow(setGrid, 0, null, null, sets);
+        //addSetRow(setGrid, 0, null, null, sets);
         exerciseCard.getChildren().add(setGrid);
 
         // Add "+ REPS" button
@@ -268,6 +277,9 @@ public class ExerciseUIController {
         setGrid.add(deleteButton, 2, row);
 
         deleteButton.setOnAction(event -> deleteSet(setGrid, currentSet, sets));
+        
+        kgField.getStyleClass().add("weight-field");
+        repsField.getStyleClass().add("reps-field");
     }
     
 
@@ -487,4 +499,6 @@ public class ExerciseUIController {
             timerController.startTimer();
         }
     }
+    
+   
 }
